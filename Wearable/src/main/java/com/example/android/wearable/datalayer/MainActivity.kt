@@ -15,8 +15,13 @@
  */
 package com.example.android.wearable.datalayer
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -38,6 +43,19 @@ class MainActivity : ComponentActivity() {
 
     private val clientDataViewModel by viewModels<ClientDataViewModel>()
 
+    private val isBodySensorsPermissionGranted: Boolean
+        get() {
+            return checkSelfPermission(Manifest.permission.BODY_SENSORS) ==
+                PackageManager.PERMISSION_GRANTED
+        }
+
+    fun navigateToAppInfo() {
+        startActivity(
+            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                .setData(Uri.fromParts("package", packageName, null))
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,6 +63,7 @@ class MainActivity : ComponentActivity() {
             MainApp(
                 events = clientDataViewModel.events,
                 image = clientDataViewModel.image,
+                isBodySensorsPermissionGranted = isBodySensorsPermissionGranted,
                 onQueryOtherDevicesClicked = ::onQueryOtherDevicesClicked,
                 onQueryMobileCameraClicked = ::onQueryMobileCameraClicked
             )

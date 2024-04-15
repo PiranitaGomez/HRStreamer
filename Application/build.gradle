@@ -76,4 +76,7 @@ dependencies {
     implementation libs.androidx.lifecycle.viewmodel.compose
     implementation libs.androidx.lifecycle.runtime.ktx
     implementation libs.playservices.wearable
+
+    implementation("com.mutualmobile:composesensors:x.y.z")
+
 }
