@@ -65,10 +65,14 @@ import androidx.wear.compose.material.items
 import androidx.wear.compose.material.rememberScalingLazyListState
 
 import android.Manifest
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.State
 import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import com.mutualmobile.composesensors.rememberHeartRateSensorState
 import com.mutualmobile.composesensors.rememberLightSensorState
 import kotlin.reflect.KSuspendFunction1
@@ -84,7 +88,8 @@ fun MainApp(
     onQueryOtherDevicesClicked: () -> Unit,
     onQueryMobileCameraClicked: () -> Unit,
     navigateToAppInfo: () -> Unit,
-    hr: Float
+    hr: Float,
+    light: Float
 ) {
     val scalingLazyListState = rememberScalingLazyListState()
     var isPermissionGranted: Boolean? by remember { mutableStateOf(null) }
@@ -105,20 +110,53 @@ fun MainApp(
             )
         ) {
             item {
-                Button(
-                    onClick = onQueryOtherDevicesClicked,
-                    modifier = Modifier.fillMaxWidth()
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colors.background),
+                    contentAlignment = Alignment.Center,
                 ) {
-                    Text(text = stringResource(id = R.string.query_other_devices))
-                }
-            }
+                    AnimatedContent(
+                        targetState = isPermissionGranted
+                    ) { animatedIsGranted ->
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            animatedIsGranted?.let { safeIsPermissionGranted ->
+                                Text(
+                                    text = if (safeIsPermissionGranted) "HR: $hr" else "Please " +
+                                        "grant the sensors permission first",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 30.sp,
+                                    fontFamily = FontFamily.SansSerif,
+                                    fontWeight = FontWeight.Medium,
+                                    color = androidx.compose.ui.graphics.Color.Yellow,
+                                    modifier = Modifier.padding(10.dp).width(200.dp)
+                                )
+                                Text(
 
-            item {
-                Button(
-                    onClick = onQueryMobileCameraClicked,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = stringResource(id = R.string.query_mobile_camera))
+                                    text = if (safeIsPermissionGranted) String.format("Illuminance: %.1f", light) else "Please " +
+                                        "grant the sensors permission first",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 20.sp,
+                                    fontFamily = FontFamily.SansSerif,
+                                    fontWeight = FontWeight.Medium,
+                                )
+
+                                if (!safeIsPermissionGranted) {
+                                    Button(
+                                        modifier = Modifier.padding(16.dp),
+                                        onClick = { navigateToAppInfo },
+                                    ) {
+                                        Text(
+                                            modifier = Modifier.padding(horizontal = 16.dp),
+                                            text = "Grant Permission"
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
@@ -150,43 +188,25 @@ fun MainApp(
             }
 
             item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colors.background),
-                    contentAlignment = Alignment.Center,
+                Button(
+                    onClick = onQueryOtherDevicesClicked,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    AnimatedContent(
-                        targetState = isPermissionGranted
-                    ) { animatedIsGranted ->
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            animatedIsGranted?.let { safeIsPermissionGranted ->
-                                Text(
-                                    text = if (safeIsPermissionGranted) "current HR: $hr" else "Please " +
-                                        "grant the sensors permission first",
-                                    textAlign = TextAlign.Center
-                                )
-
-                                if (!safeIsPermissionGranted) {
-                                    Button(
-                                        modifier = Modifier.padding(16.dp),
-                                        onClick = { navigateToAppInfo },
-                                    ) {
-                                        Text(
-                                            modifier = Modifier.padding(horizontal = 16.dp),
-                                            text = "Grant Permission"
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    Text(text = stringResource(id = R.string.query_other_devices))
                 }
             }
 
-            if (events.isEmpty()) {
+            item {
+                Button(
+                    onClick = onQueryMobileCameraClicked,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = stringResource(id = R.string.query_mobile_camera))
+                }
+            }
+
+
+            /*if (events.isEmpty()) {
                 item {
                     Text(
                         stringResource(id = R.string.waiting),
@@ -212,7 +232,7 @@ fun MainApp(
                         }
                     }
                 }
-            }
+            }*/
         }
     }
 
@@ -273,7 +293,8 @@ fun MainAppPreviewEvents() {
         onQueryOtherDevicesClicked = {},
         onQueryMobileCameraClicked = {},
         navigateToAppInfo = {},
-        hr = 66.toFloat()
+        hr = 66.toFloat(),
+        light = 10.toFloat()
     )
 }
 
@@ -287,6 +308,7 @@ fun MainAppPreviewEmpty() {
         onQueryOtherDevicesClicked = {},
         onQueryMobileCameraClicked = {},
         navigateToAppInfo = {},
-        hr = 66.toFloat()
+        hr = 66.toFloat(),
+        light = 10.toFloat()
     )
 }

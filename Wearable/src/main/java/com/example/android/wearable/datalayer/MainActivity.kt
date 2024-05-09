@@ -69,6 +69,10 @@ class MainActivity : ComponentActivity() {
         @Composable
         get() = getHR(isBodySensorsPermissionGranted = isBodySensorsPermissionGranted)
 
+    private val light: Float
+        @Composable
+        get() = getLight(isBodySensorsPermissionGranted = isBodySensorsPermissionGranted)
+
     fun navigateToAppInfo() {
         startActivity(
             Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -87,20 +91,15 @@ class MainActivity : ComponentActivity() {
                 onQueryOtherDevicesClicked = ::onQueryOtherDevicesClicked,
                 onQueryMobileCameraClicked = ::onQueryMobileCameraClicked,
                 navigateToAppInfo = ::navigateToAppInfo,
-                hr = hr
-                    //hr = getHR(isBodySensorsPermissionGranted)
+                hr = hr,
+                light = light
             )
 
             sendHR(hr)
+            sendLight(light)
 
         }
-
-
-
-        //sendHR(clientDataViewModel.hr)
-        //sendHR(66.toFloat())
-
-    }
+     }
 
     private fun onQueryOtherDevicesClicked() {
         lifecycleScope.launch {
@@ -202,6 +201,27 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun sendLight(light: Float?) {
+        lifecycleScope.launch {
+            try {
+                val request = PutDataMapRequest.create(LIGHT_PATH).apply {
+                    dataMap.putFloat(LIGHT_KEY, light!!)
+                    //dataMap.putLong(TIME_KEY, Instant.now().epochSecond)
+                }
+                    .asPutDataRequest()
+                    .setUrgent()
+
+                val result = dataClient.putDataItem(request).await()
+
+                Log.d(TAG, "LIGHT DataItem saved: $result")
+            } catch (cancellationException: CancellationException) {
+                throw cancellationException
+            } catch (exception: Exception) {
+                Log.d(TAG, "LIGHT Saving DataItem failed: $exception")
+            }
+        }
+    }
+
     companion object {
         private const val TAG = "WearMainActivity"
 
@@ -212,6 +232,8 @@ class MainActivity : ComponentActivity() {
         private const val COUNT_PATH = "/count"
         private const val HR_PATH = "/hr"
         private const val HR_KEY = "hr"
+        private const val LIGHT_PATH = "/light"
+        private const val LIGHT_KEY = "light"
         private const val TIME_KEY = "time"
         private const val COUNT_KEY = "count"
 
@@ -233,7 +255,6 @@ fun getHR(isBodySensorsPermissionGranted: Boolean): Float {
     )
 
     val heartRateSensorState = rememberHeartRateSensorState(autoStart = false)
-    val lightSensorState = rememberLightSensorState()
 
     // BODY_SENSORS permission must be granted before accessing sensor
 
@@ -242,7 +263,6 @@ fun getHR(isBodySensorsPermissionGranted: Boolean): Float {
             isPermissionGranted = isBodySensorsPermissionGranted
             if (isPermissionGranted == true) {
                 heartRateSensorState.startListening()
-                lightSensorState.startListening()
             } else {
                 permissionLauncher.launch(Manifest.permission.BODY_SENSORS)
             }
@@ -257,3 +277,37 @@ fun getHR(isBodySensorsPermissionGranted: Boolean): Float {
 
 
 
+@Composable
+fun getLight(isBodySensorsPermissionGranted: Boolean): Float {
+    val lifecycleState by LocalLifecycleOwner.current.lifecycle.observeAsState()
+    var isPermissionGranted: Boolean? by remember { mutableStateOf(null) }
+    var light: Float? by remember { mutableStateOf(null) }
+
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            isPermissionGranted = isGranted
+        }
+    )
+
+    val lightSensorState = rememberLightSensorState()
+
+    // BODY_SENSORS permission must be granted before accessing sensor
+
+    LaunchedEffect(lifecycleState) {
+        if (lifecycleState == Lifecycle.Event.ON_RESUME) {
+            isPermissionGranted = isBodySensorsPermissionGranted
+            if (isPermissionGranted == true) {
+                lightSensorState.startListening()
+            } else {
+                permissionLauncher.launch(Manifest.permission.BODY_SENSORS)
+            }
+        }
+    }
+
+    light = lightSensorState.illuminance
+
+    return light as Float
+
+}

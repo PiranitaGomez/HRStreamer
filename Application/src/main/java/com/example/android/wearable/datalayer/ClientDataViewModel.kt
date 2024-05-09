@@ -17,6 +17,7 @@ package com.example.android.wearable.datalayer
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -58,6 +59,9 @@ class ClientDataViewModel :
         private set
     var heartrate by mutableStateOf<Float?>(null)
         private set
+    var light by mutableStateOf<Float?>(null)
+        private set
+
 
     private var loadHRJob: Job = Job().apply { complete() }
 
@@ -87,6 +91,14 @@ class ClientDataViewModel :
                                 heartrate = DataMapItem.fromDataItem(dataEvent.dataItem)
                                         .dataMap
                                         .getFloat(DataLayerListenerService.HR_KEY)
+                                Log.d("ClientDataViewModel", "heart rate extracted")
+                            }
+
+                            DataLayerListenerService.LIGHT_PATH -> {
+                                light = DataMapItem.fromDataItem(dataEvent.dataItem)
+                                    .dataMap
+                                    .getFloat(DataLayerListenerService.LIGHT_KEY)
+                                Log.d("ClientDataViewModel", "light extracted")
                             }
                     }
                 }

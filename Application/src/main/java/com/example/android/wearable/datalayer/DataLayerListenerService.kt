@@ -71,6 +71,26 @@ class DataLayerListenerService : WearableListenerService() {
                         }
                     }
                 }
+
+                LIGHT_PATH -> {
+                    scope.launch {
+                        try {
+                            val nodeId = uri.host!!
+                            val payload = uri.toString().toByteArray()
+                            messageClient.sendMessage(
+                                nodeId,
+                                DATA_ITEM_RECEIVED_PATH,
+                                payload
+                            )
+                                .await()
+                            Log.d(TAG, "Light Message sent successfully")
+                        } catch (cancellationException: CancellationException) {
+                            throw cancellationException
+                        } catch (exception: Exception) {
+                            Log.d(TAG, "Light Message failed")
+                        }
+                    }
+                }
             }
         }
     }
@@ -103,5 +123,7 @@ class DataLayerListenerService : WearableListenerService() {
         const val IMAGE_KEY = "photo"
         const val HR_PATH = "/hr"
         const val HR_KEY = "hr"
+        const val LIGHT_PATH = "/light"
+        const val LIGHT_KEY = "light"
     }
 }
