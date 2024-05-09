@@ -30,13 +30,12 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -48,6 +47,7 @@ import androidx.compose.ui.unit.dp
 fun MainApp(
     events: List<Event>,
     image: Bitmap?,
+    hr: Float?,
     isCameraSupported: Boolean,
     onTakePhotoClick: () -> Unit,
     onSendPhotoClick: () -> Unit,
@@ -101,6 +101,30 @@ fun MainApp(
             }
             Divider()
         }
+
+        item {
+            Text(
+                text = "Heart Rate: $hr",
+                //text = "Heart Rate: ",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.subtitle1
+            )
+            Divider()
+            Divider()
+        }
+
+        item {
+            Text(
+                //text = "Heart Rate: " +
+                //    "${heartRateSensorState.heartRate}",
+                text = "Light: ",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.subtitle1
+            )
+            Divider()
+            Divider()
+        }
+
         items(events) { event ->
             Column {
                 Text(
@@ -148,9 +172,9 @@ fun MainAppPreview() {
             )
         ),
         image = null,
+        hr = 66.toFloat(),
         isCameraSupported = true,
         onTakePhotoClick = {},
-        onSendPhotoClick = {},
-        onStartWearableActivityClick = {}
-    )
+        onSendPhotoClick = {}
+    ) {}
 }

@@ -23,13 +23,17 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.CapabilityInfo
 import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.DataEvent
 import com.google.android.gms.wearable.DataEventBuffer
+import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  * A state holder for the client data.
@@ -52,6 +56,10 @@ class ClientDataViewModel :
      */
     var image by mutableStateOf<Bitmap?>(null)
         private set
+    var heartrate by mutableStateOf<Float?>(null)
+        private set
+
+    private var loadHRJob: Job = Job().apply { complete() }
 
     @SuppressLint("VisibleForTests")
     override fun onDataChanged(dataEvents: DataEventBuffer) {
@@ -69,6 +77,22 @@ class ClientDataViewModel :
                 )
             }
         )
+
+        // Do additional work for specific events
+        dataEvents.forEach { dataEvent ->
+            when (dataEvent.type) {
+                DataEvent.TYPE_CHANGED -> {
+                    when (dataEvent.dataItem.uri.path) {
+                            DataLayerListenerService.HR_PATH -> {
+                                heartrate = DataMapItem.fromDataItem(dataEvent.dataItem)
+                                        .dataMap
+                                        .getFloat(DataLayerListenerService.HR_KEY)
+                            }
+                    }
+                }
+            }
+        }
+
     }
 
     override fun onMessageReceived(messageEvent: MessageEvent) {

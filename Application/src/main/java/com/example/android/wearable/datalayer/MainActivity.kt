@@ -112,6 +112,7 @@ class MainActivity : ComponentActivity() {
                 MainApp(
                     events = clientDataViewModel.events,
                     image = clientDataViewModel.image,
+                    hr = clientDataViewModel.heartrate,
                     isCameraSupported = isCameraSupported,
                     onTakePhotoClick = ::takePhoto,
                     onSendPhotoClick = ::sendPhoto,

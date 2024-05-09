@@ -19,6 +19,8 @@ import java.util.Properties
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -31,8 +33,10 @@ android {
         versionCode 1
         versionName "1.0"
 
-        minSdk 26
-        targetSdk 33
+        //minSdk 26
+        minSdk 30
+
+      targetSdk 33
     }
 
     lintOptions {
@@ -97,4 +101,14 @@ dependencies {
 
     implementation("com.mutualmobile:composesensors:1.1.2")
 
+    // Health Services
+    implementation(libs.androidx.health.services.client.v110alpha02)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+
+}
+
+// Allow references to generated code
+kapt {
+  correctErrorTypes = true
 }

@@ -3,6 +3,22 @@
   <component name="deploymentTargetDropDown">
     <value>
       <entry key="Application">
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="SERIAL_NUMBER" />
+                  <value value="OUKIWP12Pro04563" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-05-09T00:48:36.038411400Z" />
+        </State>
+      </entry>
+      <entry key="MainAppPreview">
         <State />
       </entry>
       <entry key="MainAppPreviewEmpty">
@@ -24,7 +40,7 @@
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-04-15T06:24:32.480412300Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-05-06T10:17:59.500912300Z" />
         </State>
       </entry>
     </value>

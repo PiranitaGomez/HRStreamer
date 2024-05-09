@@ -20,6 +20,7 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.annotation.StringRes
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -61,6 +62,9 @@ class ClientDataViewModel(
      * The currently received image (if any), available to display.
      */
     var image by mutableStateOf<Bitmap?>(null)
+        private set
+
+    var hr by mutableStateOf<Float?>(null)
         private set
 
     private var loadPhotoJob: Job = Job().apply { complete() }

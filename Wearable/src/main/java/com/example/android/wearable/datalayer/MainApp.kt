@@ -17,7 +17,6 @@ package com.example.android.wearable.datalayer
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
@@ -50,7 +49,6 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Lifecycle.*
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Card
@@ -68,20 +66,31 @@ import androidx.wear.compose.material.rememberScalingLazyListState
 
 import android.Manifest
 import androidx.compose.runtime.State
+import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import com.mutualmobile.composesensors.rememberHeartRateSensorState
+import com.mutualmobile.composesensors.rememberLightSensorState
+import kotlin.reflect.KSuspendFunction1
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.takeWhile
 
-@OptIn(ExperimentalWearMaterialApi::class)
+@OptIn(ExperimentalWearMaterialApi::class, ExperimentalCoroutinesApi::class)
 @Composable
 fun MainApp(
     events: List<Event>,
     image: Bitmap?,
     isBodySensorsPermissionGranted: Boolean,
     onQueryOtherDevicesClicked: () -> Unit,
-    onQueryMobileCameraClicked: () -> Unit
+    onQueryMobileCameraClicked: () -> Unit,
+    navigateToAppInfo: () -> Unit,
+    hr: Float
 ) {
     val scalingLazyListState = rememberScalingLazyListState()
+    var isPermissionGranted: Boolean? by remember { mutableStateOf(null) }
+
+    isPermissionGranted = isBodySensorsPermissionGranted
+
 
     Scaffold(
         vignette = { Vignette(vignettePosition = VignettePosition.TopAndBottom) },
@@ -147,30 +156,6 @@ fun MainApp(
                         .background(MaterialTheme.colors.background),
                     contentAlignment = Alignment.Center,
                 ) {
-                    val heartRateSensorState = rememberHeartRateSensorState(autoStart = false)
-                    val lifecycleState by LocalLifecycleOwner.current.lifecycle.observeAsState()
-
-                    var isPermissionGranted: Boolean? by remember { mutableStateOf(null) }
-
-                    // BODY_SENSORS permission must be granted before accessing sensor
-                    val permissionLauncher = rememberLauncherForActivityResult(
-                        contract = ActivityResultContracts.RequestPermission(),
-                        onResult = { isGranted ->
-                            isPermissionGranted = isGranted
-                        }
-                    )
-
-                    LaunchedEffect(lifecycleState) {
-                        if (lifecycleState == Lifecycle.Event.ON_RESUME) {
-                            isPermissionGranted = isBodySensorsPermissionGranted
-                            if (isPermissionGranted == true) {
-                                heartRateSensorState.startListening()
-                            } else {
-                                permissionLauncher.launch(Manifest.permission.BODY_SENSORS)
-                            }
-                        }
-                    }
-
                     AnimatedContent(
                         targetState = isPermissionGranted
                     ) { animatedIsGranted ->
@@ -179,23 +164,22 @@ fun MainApp(
                         ) {
                             animatedIsGranted?.let { safeIsPermissionGranted ->
                                 Text(
-                                    text = if (safeIsPermissionGranted) "Heart Rate: " +
-                                        "${heartRateSensorState.heartRate}" else "Please " +
+                                    text = if (safeIsPermissionGranted) "current HR: $hr" else "Please " +
                                         "grant the sensors permission first",
                                     textAlign = TextAlign.Center
                                 )
-                                /*
+
                                 if (!safeIsPermissionGranted) {
                                     Button(
                                         modifier = Modifier.padding(16.dp),
-                                        onClick = { navigateToAppInfo() },
+                                        onClick = { navigateToAppInfo },
                                     ) {
                                         Text(
                                             modifier = Modifier.padding(horizontal = 16.dp),
                                             text = "Grant Permission"
                                         )
                                     }
-                                }*/
+                                }
                             }
                         }
                     }
@@ -287,7 +271,9 @@ fun MainAppPreviewEvents() {
         },
         isBodySensorsPermissionGranted = true,
         onQueryOtherDevicesClicked = {},
-        onQueryMobileCameraClicked = {}
+        onQueryMobileCameraClicked = {},
+        navigateToAppInfo = {},
+        hr = 66.toFloat()
     )
 }
 
@@ -299,6 +285,8 @@ fun MainAppPreviewEmpty() {
         image = null,
         isBodySensorsPermissionGranted = true,
         onQueryOtherDevicesClicked = {},
-        onQueryMobileCameraClicked = {}
+        onQueryMobileCameraClicked = {},
+        navigateToAppInfo = {},
+        hr = 66.toFloat()
     )
 }
