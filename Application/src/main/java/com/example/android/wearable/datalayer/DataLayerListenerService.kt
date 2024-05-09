@@ -123,7 +123,9 @@ class DataLayerListenerService : WearableListenerService() {
         const val IMAGE_KEY = "photo"
         const val HR_PATH = "/hr"
         const val HR_KEY = "hr"
+        const val HR_TIME_KEY = "hr_time"
         const val LIGHT_PATH = "/light"
         const val LIGHT_KEY = "light"
+        const val LIGHT_TIME_KEY = "light_time"
     }
 }

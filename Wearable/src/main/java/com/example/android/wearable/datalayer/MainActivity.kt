@@ -185,7 +185,7 @@ class MainActivity : ComponentActivity() {
             try {
                 val request = PutDataMapRequest.create(HR_PATH).apply {
                     dataMap.putFloat(HR_KEY, hr!!)
-                    //dataMap.putLong(TIME_KEY, Instant.now().epochSecond)
+                    dataMap.putLong(HR_TIME_KEY, Instant.now().epochSecond)
                 }
                     .asPutDataRequest()
                     .setUrgent()
@@ -206,7 +206,7 @@ class MainActivity : ComponentActivity() {
             try {
                 val request = PutDataMapRequest.create(LIGHT_PATH).apply {
                     dataMap.putFloat(LIGHT_KEY, light!!)
-                    //dataMap.putLong(TIME_KEY, Instant.now().epochSecond)
+                    dataMap.putLong(LIGHT_TIME_KEY, Instant.now().epochSecond)
                 }
                     .asPutDataRequest()
                     .setUrgent()
@@ -232,8 +232,10 @@ class MainActivity : ComponentActivity() {
         private const val COUNT_PATH = "/count"
         private const val HR_PATH = "/hr"
         private const val HR_KEY = "hr"
+        private const val HR_TIME_KEY = "hr_time"
         private const val LIGHT_PATH = "/light"
         private const val LIGHT_KEY = "light"
+        private const val LIGHT_TIME_KEY = "light_time"
         private const val TIME_KEY = "time"
         private const val COUNT_KEY = "count"
 

@@ -61,7 +61,10 @@ class ClientDataViewModel :
         private set
     var light by mutableStateOf<Float?>(null)
         private set
-
+    var hrtime by mutableStateOf<Long?>(null)
+        private set
+    var lighttime by mutableStateOf<Long?>(null)
+        private set
 
     private var loadHRJob: Job = Job().apply { complete() }
 
@@ -87,17 +90,29 @@ class ClientDataViewModel :
             when (dataEvent.type) {
                 DataEvent.TYPE_CHANGED -> {
                     when (dataEvent.dataItem.uri.path) {
+
                             DataLayerListenerService.HR_PATH -> {
                                 heartrate = DataMapItem.fromDataItem(dataEvent.dataItem)
                                         .dataMap
                                         .getFloat(DataLayerListenerService.HR_KEY)
+
+                                hrtime = DataMapItem.fromDataItem(dataEvent.dataItem)
+                                    .dataMap
+                                    .getLong(DataLayerListenerService.HR_TIME_KEY)
+
                                 Log.d("ClientDataViewModel", "heart rate extracted")
                             }
 
                             DataLayerListenerService.LIGHT_PATH -> {
+
                                 light = DataMapItem.fromDataItem(dataEvent.dataItem)
                                     .dataMap
                                     .getFloat(DataLayerListenerService.LIGHT_KEY)
+
+                                lighttime = DataMapItem.fromDataItem(dataEvent.dataItem)
+                                    .dataMap
+                                    .getLong(DataLayerListenerService.LIGHT_TIME_KEY)
+
                                 Log.d("ClientDataViewModel", "light extracted")
                             }
                     }

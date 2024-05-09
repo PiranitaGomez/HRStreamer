@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
@@ -36,7 +35,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -46,6 +44,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 /**
  * The UI affording the actions the user can take, along with a list of the events and the image
@@ -57,11 +58,16 @@ fun MainApp(
     image: Bitmap?,
     hr: Float?,
     light: Float?,
+    hrtime: Long?,
+    lighttime: Long?,
     isCameraSupported: Boolean,
     onTakePhotoClick: () -> Unit,
     onSendPhotoClick: () -> Unit,
     onStartWearableActivityClick: () -> Unit
 ) {
+    val nowtimestamp = LocalDateTime.now()
+    val timezone = "Asia/Tokyo"
+
     LazyColumn(contentPadding = PaddingValues(16.dp)) {
         item {
             Button(onClick = onStartWearableActivityClick) {
@@ -86,7 +92,16 @@ fun MainApp(
                     style = MaterialTheme.typography.subtitle1
                 )
                 Text(
-                    text = "$hr",
+                    text = if (hrtime != null) "${Instant.ofEpochSecond(hrtime).atZone(ZoneId.of(timezone)).toLocalDateTime()}" else "$nowtimestamp",
+                    //text = "Heart Rate: ",
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Medium,
+                    style = MaterialTheme.typography.subtitle1
+                )
+                Text(
+                    text = if (hr != null) "$hr" else "0",
                     //text = "Heart Rate: ",
                     textAlign = TextAlign.Center,
                     fontSize = 66.sp,
@@ -116,7 +131,16 @@ fun MainApp(
                     style = MaterialTheme.typography.subtitle1
                 )
                 Text(
-                    text = String.format("%.1f", light),
+                    text = if (lighttime != null) "${Instant.ofEpochSecond(lighttime).atZone(ZoneId.of(timezone)).toLocalDateTime()}" else "$nowtimestamp",
+                    //text = "Heart Rate: ",
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Medium,
+                    style = MaterialTheme.typography.subtitle1
+                )
+                Text(
+                    text = if (light != null) String.format("%.1f", light) else "0.0",
                     //text = "Heart Rate: ",
                     textAlign = TextAlign.Center,
                     fontSize = 66.sp,
@@ -222,6 +246,8 @@ fun MainAppPreview() {
         image = null,
         hr = 66.toFloat(),
         light = 10.toFloat(),
+        hrtime = Instant.now().epochSecond,
+        lighttime = Instant.now().epochSecond,
         isCameraSupported = true,
         onTakePhotoClick = {},
         onSendPhotoClick = {}
