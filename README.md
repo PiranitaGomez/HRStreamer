@@ -1,5 +1,5 @@
 
-Android DataLayer Sample
+Wear HR Streamer via DataLayer
 ========================
 
 The code was developed based on the following resources:
