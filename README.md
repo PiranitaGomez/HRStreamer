@@ -2,8 +2,12 @@
 Android DataLayer Sample
 ========================
 
-This sample demonstrates how to work with a WearableListenerService,
-to produce and consume DataEvents and effectively work with the DataLayer.
+The code was developed based on the following resources:
+- Android DataLayer Sample
+- Composesensor library
+
+The code allows the streaming of sensor data from wear devices to handheld devices using the DataLayer, it works with a WearableListenerService,
+to produce and consume DataEvents.
 
 Introduction
 ------------
