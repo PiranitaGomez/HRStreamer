@@ -15,6 +15,7 @@
  */
 package com.example.android.wearable.datalayer
 
+import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -44,9 +45,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
+
+//import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
+
 
 /**
  * The UI affording the actions the user can take, along with a list of the events and the image
@@ -67,6 +74,12 @@ fun MainApp(
 ) {
     val nowtimestamp = LocalDateTime.now()
     val timezone = "Asia/Tokyo"
+
+    /*
+    val rows=listOf(hrtime,hr)
+    csvWriter().WriteAll(rows, "test.csv")
+    
+     */
 
     LazyColumn(contentPadding = PaddingValues(16.dp)) {
         item {
@@ -212,6 +225,8 @@ fun MainApp(
         }*/
     }
 }
+
+
 
 @Preview
 @Composable

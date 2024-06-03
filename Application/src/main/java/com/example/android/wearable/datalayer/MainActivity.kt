@@ -19,8 +19,10 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -36,7 +38,11 @@ import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.NodeClient
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
+import edu.ucsd.sccn.LSL
+import edu.ucsd.sccn.LSL.StreamInfo
+import edu.ucsd.sccn.LSL.StreamOutlet
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.time.Duration
 import java.time.Instant
 import kotlinx.coroutines.CancellationException
@@ -49,6 +55,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+
 
 /**
  * Manages Wearable clients to showcase the [DataClient], [MessageClient], [CapabilityClient] and
@@ -68,6 +75,43 @@ class MainActivity : ComponentActivity() {
     private val dataClient by lazy { Wearable.getDataClient(this) }
     private val messageClient by lazy { Wearable.getMessageClient(this) }
     private val capabilityClient by lazy { Wearable.getCapabilityClient(this) }
+
+    //// LSL Outlet
+    val LSL_OUTLET_NAME_HR = "HeartRate"
+    val LSL_OUTLET_TYPE_HR = "ExciteOMeter"
+    val LSL_OUTLET_CHANNELS_HR = 1
+    val LSL_OUTLET_NOMINAL_RATE_HR = LSL.IRREGULAR_RATE
+    val LSL_OUTLET_CHANNEL_FORMAT_HR = LSL.ChannelFormat.int16
+    var info_HR: StreamInfo? = null
+    var outlet_HR: StreamOutlet? = null
+    var samples_HR = IntArray(1)
+
+    private val tv: TextView? = null
+
+    // LSL Callbacks
+    private fun showMessage(string: String) {
+        runOnUiThread { tv?.text = string }
+    }
+    fun sendDataHR(data: Int) {
+        try {
+            /*final String dataString = Integer.toString(data);
+            runOnUiThread(new Runnable(){
+                @Override
+                public void run(){
+                    showMessage("Now sending HR: " + dataString);
+                }
+            });*/
+            samples_HR[0] = data
+            outlet_HR!!.push_sample(samples_HR)
+
+            //Thread.sleep(5);
+        } catch (ex: java.lang.Exception) {
+            ex.message?.let { showMessage(it) }
+            outlet_HR!!.close()
+            info_HR!!.destroy()
+        }
+    }
+
 
     private val isCameraSupported by lazy {
         packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)
@@ -106,6 +150,31 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+
+        //// LSL Outlet
+
+        println(LSL.local_clock())
+
+        AsyncTask.execute(Runnable { // configure HR
+            showMessage("Creating a new StreamInfo HR...")
+            info_HR = StreamInfo(
+                LSL_OUTLET_NAME_HR,
+                LSL_OUTLET_TYPE_HR,
+                LSL_OUTLET_CHANNELS_HR,
+                LSL_OUTLET_NOMINAL_RATE_HR,
+                LSL_OUTLET_CHANNEL_FORMAT_HR,
+                // DEVICE_ID // Is this device id absolutely necessary?
+            )
+            showMessage("Creating an outlet HR...")
+            outlet_HR = try {
+                StreamOutlet(info_HR)
+            } catch (ex: IOException) {
+                showMessage("Unable to open LSL outlet. Have you added <uses-permission android:name=\"android.permission.INTERNET\" /> to your manifest file?")
+                return@Runnable
+            }
+        })
+
 
         setContent {
             MaterialTheme {
