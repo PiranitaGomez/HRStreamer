@@ -16,18 +16,18 @@
       </entry>
       <entry key="Wearable">
         <State>
-          <targetSelectedWithDropDown>
+          <runningDeviceTargetSelectedWithDropDown>
             <Target>
-              <type value="QUICK_BOOT_TARGET" />
+              <type value="RUNNING_DEVICE_TARGET" />
               <deviceKey>
                 <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\panda\.android\avd\RoundOS.avd" />
+                  <type value="SERIAL_NUMBER" />
+                  <value value="OUKIWP12Pro04563" />
                 </Key>
               </deviceKey>
             </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-05-06T10:17:59.500912300Z" />
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-07-07T09:39:37.336292300Z" />
         </State>
       </entry>
     </value>

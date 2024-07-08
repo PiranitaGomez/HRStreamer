@@ -13,10 +13,11 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.DeviceDefault">
-        <service
+
+        <!--service
             android:name=".HealthServices"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true"></service-->
 
         <meta-data
             android:name="com.google.android.wearable.standalone"
