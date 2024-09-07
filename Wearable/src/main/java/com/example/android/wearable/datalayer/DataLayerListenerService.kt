@@ -17,8 +17,10 @@ package com.example.android.wearable.datalayer
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.AsyncTask
 import android.util.Log
 import com.google.android.gms.wearable.DataEventBuffer
+import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService
@@ -29,6 +31,8 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import edu.ucsd.sccn.LSL
+import java.io.IOException
 
 class DataLayerListenerService : WearableListenerService() {
 
@@ -39,6 +43,7 @@ class DataLayerListenerService : WearableListenerService() {
     @SuppressLint("VisibleForTests")
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         super.onDataChanged(dataEvents)
+
 
         dataEvents.forEach { dataEvent ->
             val uri = dataEvent.dataItem.uri
@@ -68,6 +73,12 @@ class DataLayerListenerService : WearableListenerService() {
                         try {
                             val nodeId = uri.host!!
                             val payload = uri.toString().toByteArray()
+
+                            /*sendDataHR(
+                                DataMapItem.fromDataItem(dataEvent.dataItem)
+                                .dataMap
+                                .getFloat(DataLayerListenerService.HR_KEY))*/
+
                             messageClient.sendMessage(
                                 nodeId,
                                 DATA_ITEM_RECEIVED_PATH,
@@ -81,6 +92,7 @@ class DataLayerListenerService : WearableListenerService() {
                             Log.d(TAG, "HR Message failed")
                         }
                     }
+
                 }
 
                 LIGHT_PATH -> {
@@ -88,6 +100,7 @@ class DataLayerListenerService : WearableListenerService() {
                         try {
                             val nodeId = uri.host!!
                             val payload = uri.toString().toByteArray()
+
                             messageClient.sendMessage(
                                 nodeId,
                                 DATA_ITEM_RECEIVED_PATH,
@@ -136,5 +149,6 @@ class DataLayerListenerService : WearableListenerService() {
         const val HR_PATH = "/hr"
         const val HR_KEY = "hr"
         const val LIGHT_PATH = "/light"
+        const val LIGHT_KEY = "light"
     }
 }

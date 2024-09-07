@@ -15,20 +15,7 @@
         <State />
       </entry>
       <entry key="Wearable">
-        <State>
-          <runningDeviceTargetSelectedWithDropDown>
-            <Target>
-              <type value="RUNNING_DEVICE_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="SERIAL_NUMBER" />
-                  <value value="OUKIWP12Pro04563" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </runningDeviceTargetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-07-07T09:39:37.336292300Z" />
-        </State>
+        <State />
       </entry>
     </value>
   </component>

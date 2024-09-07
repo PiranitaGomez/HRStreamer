@@ -101,7 +101,9 @@ dependencies {
 
     implementation("com.mutualmobile:composesensors:1.1.2")
 
-    // Health Services
+    implementation files('libs/jna-5.13.0.jar') // For LSL
+
+  // Health Services
     implementation(libs.androidx.health.services.client.v110alpha02)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)

@@ -19,6 +19,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -43,6 +44,8 @@ import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import com.mutualmobile.composesensors.rememberHeartRateSensorState
 import com.mutualmobile.composesensors.rememberLightSensorState
+import edu.ucsd.sccn.LSL
+import java.io.IOException
 import java.time.Instant
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
@@ -56,6 +59,43 @@ class MainActivity : ComponentActivity() {
 
     private val clientDataViewModel by viewModels<ClientDataViewModel>()
 
+    //// LSL Outlet
+    val LSL_OUTLET_NAME_HR = "HeartRate"
+    val LSL_OUTLET_TYPE_HR = "DataLayer"
+    val LSL_OUTLET_CHANNELS_HR = 1
+    val LSL_OUTLET_NOMINAL_RATE_HR = LSL.IRREGULAR_RATE
+    val LSL_OUTLET_CHANNEL_FORMAT_HR = LSL.ChannelFormat.int16
+    var info_HR: LSL.StreamInfo? = null
+    var outlet_HR: LSL.StreamOutlet? = null
+    var samples_HR = IntArray(1)
+
+    private fun sendDataHR(data: Float?) {
+
+        Log.d("watch2PC", "Now sending HR:$data")
+
+        try {
+                /*final String dataString = Integer.toString(data);
+            runOnUiThread(new Runnable(){
+                @Override
+                public void run(){
+                    showMessage("Now sending HR: " + dataString);
+                }
+            });*/
+                samples_HR[0] = data!!.toInt()
+                Log.d("watch2PC", "Pushing sample:$samples_HR")
+                Log.d("watch2PC", "Double check Outlet:$outlet_HR")
+
+                outlet_HR!!.push_sample(samples_HR)
+
+                //Thread.sleep(5);
+            } catch (ex: java.lang.Exception) {
+                //ex.message?.let { showMessage(it) }
+                Log.e("watch2PC", "Failed to push sample:")
+                outlet_HR!!.close()
+                info_HR!!.destroy()
+            }
+    }
+
 
     private val isBodySensorsPermissionGranted: Boolean
         get() {
@@ -65,6 +105,10 @@ class MainActivity : ComponentActivity() {
 
 
     // What's wrong with hr being composable? --> it worked!
+
+    var heartRate by mutableStateOf<Float?>(null)
+        private set
+
     private val hr: Float
         @Composable
         get() = getHR(isBodySensorsPermissionGranted = isBodySensorsPermissionGranted)
@@ -83,6 +127,42 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //// LSL Outlet
+        println(LSL.local_clock())
+
+        if(outlet_HR == null) {
+            AsyncTask.execute(Runnable { // configure HR
+                //showMessage("Creating a new StreamInfo HR...")
+                Log.e("watch2PC", "Creating a new StreamInfo HR...")
+
+                info_HR = LSL.StreamInfo(
+                    LSL_OUTLET_NAME_HR,
+                    LSL_OUTLET_TYPE_HR,
+                    LSL_OUTLET_CHANNELS_HR,
+                    LSL_OUTLET_NOMINAL_RATE_HR,
+                    LSL_OUTLET_CHANNEL_FORMAT_HR
+                    // DEVICE_ID // Is this device id absolutely necessary?
+                )
+                //showMessage("Creating an outlet HR...")
+                Log.d("watch2PC", "Creating an outlet HR...")
+                Log.d("watch2PC", "Value:$info_HR")
+                outlet_HR = try {
+                    Log.d("watch2PC", "LSL outlet opening!!!")
+                    LSL.StreamOutlet(info_HR)
+                } catch (ex: IOException) {
+                    //showMessage("Unable to open LSL outlet. Have you added <uses-permission android:name=\"android.permission.INTERNET\" /> to your manifest file?")
+                    Log.e(
+                        "watch2PC",
+                        "Unable to open LSL outlet. Have you added <uses-permission android:name=\"android.permission.INTERNET\" /> to your manifest file?"
+                    )
+                    return@Runnable
+                }
+
+                Log.d("watch2PC", "Outlet opened:$outlet_HR")
+
+            })
+        }
+
         setContent {
             MainApp(
                 events = clientDataViewModel.events,
@@ -95,11 +175,16 @@ class MainActivity : ComponentActivity() {
                 light = light
             )
 
-            sendHR(hr)
-            sendLight(light)
+            /*var heartrate by remember { mutableStateOf("") }
+            heartrate = hr.toString()*/
+
+            sendHR(hr) //send to hand-held device
+            sendLight(light) //send to hand-held device
+            sendDataHR(hr)
 
         }
-     }
+
+    }
 
     private fun onQueryOtherDevicesClicked() {
         lifecycleScope.launch {
@@ -199,6 +284,7 @@ class MainActivity : ComponentActivity() {
                 Log.d(TAG, "HR Saving DataItem failed: $exception")
             }
         }
+
     }
 
     private fun sendLight(light: Float?) {
@@ -220,6 +306,7 @@ class MainActivity : ComponentActivity() {
                 Log.d(TAG, "LIGHT Saving DataItem failed: $exception")
             }
         }
+
     }
 
     companion object {
@@ -241,6 +328,7 @@ class MainActivity : ComponentActivity() {
 
     }
 }
+
 
 @Composable
 fun getHR(isBodySensorsPermissionGranted: Boolean): Float {
