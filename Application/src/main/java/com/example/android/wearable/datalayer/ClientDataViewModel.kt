@@ -68,8 +68,7 @@ class ClientDataViewModel :
     var lighttime by mutableStateOf<Long?>(null)
         private set
 
-    private var loadHRJob: Job = Job().apply { complete() }
-
+    //private var loadHRJob: Job = Job().apply { complete() }
 
 
     //// LSL Outlet
@@ -83,7 +82,8 @@ class ClientDataViewModel :
     var samples_HR = IntArray(1)
 
     private fun sendDataHR(data: Float?) {
-        Log.d("LSL", "Now sending HR:$data")
+        //val name = outlet_HR!!.info().as_xml()
+        //Log.d("LSL", "Outlet:$name")
 
         try {
             /*final String dataString = Integer.toString(data);
@@ -94,8 +94,9 @@ class ClientDataViewModel :
                 }
             });*/
             samples_HR[0] = data!!.toInt()
-            Log.d("LSL", "Pushing sample:$samples_HR")
+            //Log.d("LSL", "Pushing sample:$samples_HR[0]")
             outlet_HR!!.push_sample(samples_HR)
+            Log.d("LSL", "HR Sent:$data")
 
             //Thread.sleep(5);
         } catch (ex: java.lang.Exception) {
@@ -130,9 +131,10 @@ class ClientDataViewModel :
                 )
                 //showMessage("Creating an outlet HR...")
                 Log.e("LSL", "Creating an outlet HR...")
-                Log.d("LSL", "Value:$info_HR")
+                Log.e("LSL", "Value:${info_HR!!.type()}")
+
                 outlet_HR = try {
-                    Log.e("LSL", "LSL outlet opened!!!")
+                    Log.e("LSL", "LSL outlet opened in ViewModel!!!")
                     LSL.StreamOutlet(info_HR)
                 } catch (ex: IOException) {
                     //showMessage("Unable to open LSL outlet. Have you added <uses-permission android:name=\"android.permission.INTERNET\" /> to your manifest file?")
@@ -142,6 +144,7 @@ class ClientDataViewModel :
             })
 
         }
+
 
         _events.addAll(
             dataEvents.map { dataEvent ->

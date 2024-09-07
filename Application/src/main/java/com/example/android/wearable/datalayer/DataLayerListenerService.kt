@@ -24,13 +24,12 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 
 
-class DataLayerListenerService :
-    WearableListenerService(),
-    DataClient.OnDataChangedListener {
+class DataLayerListenerService : WearableListenerService() {
 
     private val dataClient by lazy { Wearable.getDataClient(this) }
     private val messageClient by lazy { Wearable.getMessageClient(this) }
     private val capabilityClient by lazy { Wearable.getCapabilityClient(this) }
+
 
     //// LSL Outlet
     val LSL_OUTLET_NAME_HR = "HeartRate"
@@ -67,7 +66,10 @@ class DataLayerListenerService :
     }
 
 
+
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
+
 
     // サービスの初期化時に実行する処理
     override fun onCreate() {
@@ -89,7 +91,7 @@ class DataLayerListenerService :
             Log.e("LSL", "Creating an outlet HR...")
             Log.d("LSL", "Value:$info_HR")
             outlet_HR = try {
-                Log.e("LSL", "LSL outlet opened!!!")
+                Log.e("LSL", "LSL outlet opened in DataLayerListenerService!!!")
                 LSL.StreamOutlet(info_HR)
             } catch (ex: IOException) {
                 //showMessage("Unable to open LSL outlet. Have you added <uses-permission android:name=\"android.permission.INTERNET\" /> to your manifest file?")
