@@ -22,6 +22,7 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -124,19 +125,22 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 MainApp(
-                    events = clientDataViewModel.events,
-                    image = clientDataViewModel.image,
+                    //events = clientDataViewModel.events,
+                    //image = clientDataViewModel.image,
                     hr = clientDataViewModel.heartrate,
-                    hrtime = clientDataViewModel.hrtime,
+                    hrtime = clientDataViewModel.hrsendtime,
                     light = clientDataViewModel.light,
                     lighttime = clientDataViewModel.lighttime,
-                    isCameraSupported = isCameraSupported,
-                    onTakePhotoClick = ::takePhoto,
-                    onSendPhotoClick = ::sendPhoto,
+                    //isCameraSupported = isCameraSupported,
+                    //onTakePhotoClick = ::takePhoto,
+                    //onSendPhotoClick = ::sendPhoto,
                     onStartWearableActivityClick = ::startWearableActivity
                 )
             }
         }
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
 
     }
 

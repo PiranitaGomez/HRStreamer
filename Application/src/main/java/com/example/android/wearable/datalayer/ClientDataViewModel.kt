@@ -36,6 +36,7 @@ import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import edu.ucsd.sccn.LSL
 import java.io.IOException
+import java.time.Instant
 import kotlinx.coroutines.Job
 
 /**
@@ -63,27 +64,40 @@ class ClientDataViewModel :
         private set
     var light by mutableStateOf<Float?>(null)
         private set
-    var hrtime by mutableStateOf<Long?>(null)
+    var hrsendtime by mutableStateOf<Long?>(null)
         private set
     var lighttime by mutableStateOf<Long?>(null)
         private set
 
     //private var loadHRJob: Job = Job().apply { complete() }
 
-
     //// LSL Outlet
     val LSL_OUTLET_NAME_HR = "HeartRate"
     val LSL_OUTLET_TYPE_HR = "DataLayer"
-    val LSL_OUTLET_CHANNELS_HR = 1
+    val LSL_OUTLET_CHANNELS_HR = 3 // One channel for HR data, one channel for sendtime, one channel for relay time
     val LSL_OUTLET_NOMINAL_RATE_HR = LSL.IRREGULAR_RATE
-    val LSL_OUTLET_CHANNEL_FORMAT_HR = LSL.ChannelFormat.int16
+    //val LSL_OUTLET_CHANNEL_FORMAT_HR = LSL.ChannelFormat.int16
+    val LSL_OUTLET_CHANNEL_FORMAT_HR = LSL.ChannelFormat.int32
+    val DEVICE_ID = "PixelWatch"
     var info_HR: LSL.StreamInfo? = null
     var outlet_HR: LSL.StreamOutlet? = null
-    var samples_HR = IntArray(1)
+    //var samples_HR: Array<Int?> = arrayOfNulls(1)
+    var samples_HR = IntArray(3)
 
-    private fun sendDataHR(data: Float?) {
-        //val name = outlet_HR!!.info().as_xml()
-        //Log.d("LSL", "Outlet:$name")
+    private fun sendDataHR(data: Float?, timestamp: Long?) {
+
+        //Log.d("LSL", "samples_HR: $samples_HR")
+
+        samples_HR[0] = data!!.toInt()
+        Log.d("LSL", "Now sending HR:$data")
+
+        samples_HR[1] = (timestamp!! % 100000).toInt() // not able to send long format, so only truncate the lower 5 digits
+        Log.d("LSL", "Now send_timestamp:$timestamp")
+
+        samples_HR[2] = (System.currentTimeMillis() % 100000).toInt()
+        //samples_HR[2] = Instant.now().epochSecond.toInt()
+        Log.d("LSL", "Now relay_timestamp_long:${System.currentTimeMillis()}")
+        Log.d("LSL", "Now relay_timestamp_second:${(System.currentTimeMillis() % 100000).toInt()}")
 
         try {
             /*final String dataString = Integer.toString(data);
@@ -93,11 +107,8 @@ class ClientDataViewModel :
                     showMessage("Now sending HR: " + dataString);
                 }
             });*/
-            samples_HR[0] = data!!.toInt()
-            //Log.d("LSL", "Pushing sample:$samples_HR[0]")
+            Log.e("LSL", "Pushing samples_HR:$samples_HR")
             outlet_HR!!.push_sample(samples_HR)
-            Log.d("LSL", "HR Sent:$data")
-
             //Thread.sleep(5);
         } catch (ex: java.lang.Exception) {
             //ex.message?.let { showMessage(it) }
@@ -105,9 +116,9 @@ class ClientDataViewModel :
             outlet_HR!!.close()
             info_HR!!.destroy()
         }
+
+
     }
-
-
 
 
     @SuppressLint("VisibleForTests")
@@ -116,34 +127,31 @@ class ClientDataViewModel :
         //// LSL Outlet
         println(LSL.local_clock())
 
-        if(outlet_HR == null)
-        {
-            AsyncTask.execute(Runnable { // configure HR
-                //showMessage("Creating a new StreamInfo HR...")
-                Log.e("LSL", "Creating a new StreamInfo HR...")
-                info_HR = LSL.StreamInfo(
-                    LSL_OUTLET_NAME_HR,
-                    LSL_OUTLET_TYPE_HR,
-                    LSL_OUTLET_CHANNELS_HR,
-                    LSL_OUTLET_NOMINAL_RATE_HR,
-                    LSL_OUTLET_CHANNEL_FORMAT_HR,
-                    // DEVICE_ID // Is this device id absolutely necessary?
-                )
-                //showMessage("Creating an outlet HR...")
-                Log.e("LSL", "Creating an outlet HR...")
-                Log.e("LSL", "Value:${info_HR!!.type()}")
+        if(outlet_HR == null) {
 
-                outlet_HR = try {
-                    Log.e("LSL", "LSL outlet opened in ViewModel!!!")
-                    LSL.StreamOutlet(info_HR)
-                } catch (ex: IOException) {
-                    //showMessage("Unable to open LSL outlet. Have you added <uses-permission android:name=\"android.permission.INTERNET\" /> to your manifest file?")
-                    Log.e("LSL", "Unable to open LSL outlet. Have you added <uses-permission android:name=\"android.permission.INTERNET\" /> to your manifest file?")
-                    return@Runnable
-                }
-            })
-
-        }
+        AsyncTask.execute(Runnable { // configure HR
+            //showMessage("Creating a new StreamInfo HR...")
+            Log.e("LSL", "Creating a new StreamInfo HR...")
+            info_HR = LSL.StreamInfo(
+                LSL_OUTLET_NAME_HR,
+                LSL_OUTLET_TYPE_HR,
+                LSL_OUTLET_CHANNELS_HR,
+                LSL_OUTLET_NOMINAL_RATE_HR,
+                LSL_OUTLET_CHANNEL_FORMAT_HR,
+                DEVICE_ID // Is this device id absolutely necessary?
+            )
+            //showMessage("Creating an outlet HR...")
+            Log.e("LSL", "Creating an outlet HR...")
+            //Log.d("LSL", "Value:$info_HR")
+            outlet_HR = try {
+                Log.e("LSL", "LSL outlet opened in DataLayerListenerService!!!")
+                LSL.StreamOutlet(info_HR)
+            } catch (ex: IOException) {
+                //showMessage("Unable to open LSL outlet. Have you added <uses-permission android:name=\"android.permission.INTERNET\" /> to your manifest file?")
+                Log.e("LSL", "Unable to open LSL outlet. Have you added <uses-permission android:name=\"android.permission.INTERNET\" /> to your manifest file?")
+                return@Runnable
+            }
+        })}
 
 
         _events.addAll(
@@ -172,13 +180,13 @@ class ClientDataViewModel :
                                         .dataMap
                                         .getFloat(DataLayerListenerService.HR_KEY)
 
-                                hrtime = DataMapItem.fromDataItem(dataEvent.dataItem)
+                                hrsendtime = DataMapItem.fromDataItem(dataEvent.dataItem)
                                     .dataMap
                                     .getLong(DataLayerListenerService.HR_TIME_KEY)
 
                                 //Log.d("ClientDataViewModel", "heart rate extracted")
 
-                                sendDataHR(heartrate)
+                                sendDataHR(heartrate, hrsendtime)
                             }
 
                             DataLayerListenerService.LIGHT_PATH -> {

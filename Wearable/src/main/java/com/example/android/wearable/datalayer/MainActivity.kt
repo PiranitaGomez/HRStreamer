@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2025 HRStreamer
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -47,6 +48,7 @@ import com.mutualmobile.composesensors.rememberLightSensorState
 //import edu.ucsd.sccn.LSL
 import java.io.IOException
 import java.time.Instant
+import java.time.ZoneId
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -169,21 +171,20 @@ class MainActivity : ComponentActivity() {
         setContent {
             MainApp(
                 events = clientDataViewModel.events,
-                image = clientDataViewModel.image,
                 isBodySensorsPermissionGranted = isBodySensorsPermissionGranted,
-                onQueryOtherDevicesClicked = ::onQueryOtherDevicesClicked,
-                onQueryMobileCameraClicked = ::onQueryMobileCameraClicked,
+                //onQueryOtherDevicesClicked = ::onQueryOtherDevicesClicked,
+                //onQueryMobileCameraClicked = ::onQueryMobileCameraClicked,
                 navigateToAppInfo = ::navigateToAppInfo,
                 hr = hr,
                 light = light
             )
 
-            /*var heartrate by remember { mutableStateOf("") }
-            heartrate = hr.toString()*/
-
             sendHR(hr) //send to hand-held device
             sendLight(light) //send to hand-held device
             //sendDataHR(light)
+
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
 
         }
 
@@ -273,14 +274,16 @@ class MainActivity : ComponentActivity() {
             try {
                 val request = PutDataMapRequest.create(HR_PATH).apply {
                     dataMap.putFloat(HR_KEY, hr!!)
-                    dataMap.putLong(HR_TIME_KEY, Instant.now().epochSecond)
+                    dataMap.putLong(HR_SEND_TIME_KEY, System.currentTimeMillis())//Instant.now().epochSecond)
                 }
                     .asPutDataRequest()
                     .setUrgent()
 
                 val result = dataClient.putDataItem(request).await()
 
+                Log.d(TAG, "HR_KEY: $hr")
                 Log.d(TAG, "HR DataItem saved: $result")
+                //Log.d(TAG, "HR_TIME_KEY: ${Instant.now().atZone(ZoneId.of("Asia/Tokyo"))}")
             } catch (cancellationException: CancellationException) {
                 throw cancellationException
             } catch (exception: Exception) {
@@ -296,13 +299,17 @@ class MainActivity : ComponentActivity() {
                 val request = PutDataMapRequest.create(LIGHT_PATH).apply {
                     dataMap.putFloat(LIGHT_KEY, light!!)
                     dataMap.putLong(LIGHT_TIME_KEY, Instant.now().epochSecond)
+                    //Log.d(TAG, "LIGHT_TIME_KEY: ${Instant.now().atZone(ZoneId.of("Asia/Tokyo"))}")
+                    //${Instant.ofEpochSecond(hrtime).atZone(ZoneId.of(timezone)).toLocalDateTime()}
                 }
                     .asPutDataRequest()
                     .setUrgent()
 
                 val result = dataClient.putDataItem(request).await()
 
+                Log.d(TAG, "LIGHT: $light")
                 Log.d(TAG, "LIGHT DataItem saved: $result")
+
             } catch (cancellationException: CancellationException) {
                 throw cancellationException
             } catch (exception: Exception) {
@@ -322,7 +329,7 @@ class MainActivity : ComponentActivity() {
         private const val COUNT_PATH = "/count"
         private const val HR_PATH = "/hr"
         private const val HR_KEY = "hr"
-        private const val HR_TIME_KEY = "hr_time"
+        private const val HR_SEND_TIME_KEY = "hr_time"
         private const val LIGHT_PATH = "/light"
         private const val LIGHT_KEY = "light"
         private const val LIGHT_TIME_KEY = "light_time"

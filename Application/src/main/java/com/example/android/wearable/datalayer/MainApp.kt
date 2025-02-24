@@ -61,15 +61,15 @@ import java.time.ZoneId
  */
 @Composable
 fun MainApp(
-    events: List<Event>,
-    image: Bitmap?,
+    //events: List<Event>,
+    //image: Bitmap?,
     hr: Float?,
     light: Float?,
     hrtime: Long?,
     lighttime: Long?,
-    isCameraSupported: Boolean,
-    onTakePhotoClick: () -> Unit,
-    onSendPhotoClick: () -> Unit,
+    //isCameraSupported: Boolean,
+    //onTakePhotoClick: () -> Unit,
+    //onSendPhotoClick: () -> Unit,
     onStartWearableActivityClick: () -> Unit
 ) {
     val nowtimestamp = LocalDateTime.now()
@@ -78,7 +78,7 @@ fun MainApp(
     /*
     val rows=listOf(hrtime,hr)
     csvWriter().WriteAll(rows, "test.csv")
-    
+
      */
 
     LazyColumn(contentPadding = PaddingValues(16.dp)) {
@@ -167,7 +167,7 @@ fun MainApp(
         }
 
 
-        item {
+        /*item {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -207,7 +207,7 @@ fun MainApp(
                 }
             }
             Divider()
-        }
+        }*/
 
        /*
         items(events) { event ->
@@ -232,7 +232,7 @@ fun MainApp(
 @Composable
 fun MainAppPreview() {
     MainApp(
-        events = listOf(
+        /*events = listOf(
             Event(
                 title = R.string.data_item_changed,
                 text = "Event 1"
@@ -258,13 +258,13 @@ fun MainAppPreview() {
                 text = "Event 6"
             )
         ),
-        image = null,
+        image = null,*/
         hr = 66.toFloat(),
         light = 10.toFloat(),
         hrtime = Instant.now().epochSecond,
         lighttime = Instant.now().epochSecond,
-        isCameraSupported = true,
-        onTakePhotoClick = {},
-        onSendPhotoClick = {}
+        //isCameraSupported = true,
+        //onTakePhotoClick = {},
+        //onSendPhotoClick = {}
     ) {}
 }

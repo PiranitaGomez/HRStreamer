@@ -18,10 +18,12 @@ import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService
 import edu.ucsd.sccn.LSL
 import java.io.IOException
+import java.sql.Timestamp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+
 
 
 class DataLayerListenerService : WearableListenerService() {
@@ -34,14 +36,15 @@ class DataLayerListenerService : WearableListenerService() {
     //// LSL Outlet
     val LSL_OUTLET_NAME_HR = "HeartRate"
     val LSL_OUTLET_TYPE_HR = "DataLayer"
-    val LSL_OUTLET_CHANNELS_HR = 1
+    val LSL_OUTLET_CHANNELS_HR = 3 // One channel for HR data, one channel for sendtime, one channel for relay time
     val LSL_OUTLET_NOMINAL_RATE_HR = LSL.IRREGULAR_RATE
-    val LSL_OUTLET_CHANNEL_FORMAT_HR = LSL.ChannelFormat.int16
+    //val LSL_OUTLET_CHANNEL_FORMAT_HR = LSL.ChannelFormat.int16
+    val LSL_OUTLET_CHANNEL_FORMAT_HR = LSL.ChannelFormat.double64
     var info_HR: LSL.StreamInfo? = null
     var outlet_HR: LSL.StreamOutlet? = null
-    var samples_HR = IntArray(1)
+    var samples_HR = doubleArrayOf(3.0)
 
-    private fun sendDataHR(data: Float?) {
+    private fun sendDataHR(data: Float?, timestamp: Long?) {
         Log.d("LSL", "Now sending HR:$data")
 
         try {
@@ -52,8 +55,13 @@ class DataLayerListenerService : WearableListenerService() {
                     showMessage("Now sending HR: " + dataString);
                 }
             });*/
-            samples_HR[0] = data!!.toInt()
-            Log.d("LSL", "Pushing sample:$samples_HR")
+            samples_HR[0] = data!!.toDouble()
+            samples_HR[1] = timestamp!!.toDouble()
+            samples_HR[2] = System.currentTimeMillis().toDouble()
+            Log.d("LSL", "Pushing samples_HR [0]:$samples_HR[0]")
+            Log.d("LSL", "Pushing samples_HR [1]:$samples_HR[1]")
+            Log.d("LSL", "Pushing samples_HR [2]:$samples_HR[2]")
+
             outlet_HR!!.push_sample(samples_HR)
 
             //Thread.sleep(5);
@@ -111,6 +119,9 @@ class DataLayerListenerService : WearableListenerService() {
     var heartrate by mutableStateOf<Float?>(null)
         private set
 
+    var hrsendtime by mutableStateOf<Long?>(null)
+        private set
+
     @SuppressLint("VisibleForTests")
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         super.onDataChanged(dataEvents)
@@ -141,12 +152,12 @@ class DataLayerListenerService : WearableListenerService() {
                                     .dataMap
                                     .getFloat(DataLayerListenerService.HR_KEY)
 
-                            /*hrtime = DataMapItem.fromDataItem(dataEvent.dataItem)
+                                hrsendtime = DataMapItem.fromDataItem(dataEvent.dataItem)
                                 .dataMap
-                                .getLong(DataLayerListenerService.HR_TIME_KEY)*/
+                                .getLong(DataLayerListenerService.HR_TIME_KEY)
 
                             Log.d("LSL", "heart rate extracted from DataLayerListenerService")
-                            sendDataHR(heartrate)
+                            sendDataHR(heartrate, hrsendtime)
 
                         }
 

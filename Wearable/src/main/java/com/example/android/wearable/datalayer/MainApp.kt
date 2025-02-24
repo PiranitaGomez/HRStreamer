@@ -17,33 +17,21 @@ package com.example.android.wearable.datalayer
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Color
 import android.net.Uri
 import android.provider.Settings
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.Card
 import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.PositionIndicator
@@ -61,7 +48,6 @@ import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
 import androidx.wear.compose.material.Vignette
 import androidx.wear.compose.material.VignettePosition
-import androidx.wear.compose.material.items
 import androidx.wear.compose.material.rememberScalingLazyListState
 
 import android.Manifest
@@ -83,10 +69,9 @@ import kotlinx.coroutines.flow.takeWhile
 @Composable
 fun MainApp(
     events: List<Event>,
-    image: Bitmap?,
     isBodySensorsPermissionGranted: Boolean,
-    onQueryOtherDevicesClicked: () -> Unit,
-    onQueryMobileCameraClicked: () -> Unit,
+    //onQueryOtherDevicesClicked: () -> Unit,
+    //onQueryMobileCameraClicked: () -> Unit,
     navigateToAppInfo: () -> Unit,
     hr: Float,
     light: Float
@@ -124,21 +109,34 @@ fun MainApp(
                         ) {
                             animatedIsGranted?.let { safeIsPermissionGranted ->
                                 Text(
-                                    text = if (safeIsPermissionGranted) "HR: $hr" else "Please " +
+                                    text = if (safeIsPermissionGranted) "Heart Rate" else "Please " +
                                         "grant the sensors permission first",
                                     textAlign = TextAlign.Center,
-                                    fontSize = 30.sp,
+                                    fontSize = 24.sp,
+                                    fontFamily = FontFamily.SansSerif,
+                                    fontWeight = FontWeight.Medium,
+                                    color = androidx.compose.ui.graphics.Color.Yellow
+                                    //modifier = Modifier.padding(10.dp).width(200.dp)
+                                )
+                                Text(
+                                    text = if (safeIsPermissionGranted) "$hr" else "Please " +
+                                        "grant the sensors permission first",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 56.sp,
                                     fontFamily = FontFamily.SansSerif,
                                     fontWeight = FontWeight.Medium,
                                     color = androidx.compose.ui.graphics.Color.Yellow,
-                                    modifier = Modifier.padding(10.dp).width(200.dp)
+                                    modifier = Modifier.padding(5.dp).width(200.dp)
                                 )
                                 Text(
 
-                                    text = if (safeIsPermissionGranted) String.format("Illuminance: %.1f", light) else "Please " +
+                                    text = if (safeIsPermissionGranted) String.format(
+                                        "Illuminance: %.1f",
+                                        light
+                                    ) else "Please " +
                                         "grant the sensors permission first",
                                     textAlign = TextAlign.Center,
-                                    fontSize = 20.sp,
+                                    fontSize = 16.sp,
                                     fontFamily = FontFamily.SansSerif,
                                     fontWeight = FontWeight.Medium,
                                 )
@@ -158,8 +156,9 @@ fun MainApp(
                         }
                     }
                 }
-            }
 
+
+                /*
             item {
                 Box(
                     modifier = Modifier
@@ -203,10 +202,10 @@ fun MainApp(
                 ) {
                     Text(text = stringResource(id = R.string.query_mobile_camera))
                 }
-            }
+            }*/
 
 
-            /*if (events.isEmpty()) {
+                /*if (events.isEmpty()) {
                 item {
                     Text(
                         stringResource(id = R.string.waiting),
@@ -233,9 +232,10 @@ fun MainApp(
                     }
                 }
             }*/
+            }
         }
-    }
 
+    }
 }
 
 fun Activity.navigateToAppInfo() {
@@ -286,12 +286,13 @@ fun MainAppPreviewEvents() {
                 text = "Event 6"
             )
         ),
+        /*
         image = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888).apply {
             eraseColor(Color.WHITE)
-        },
+        },*/
         isBodySensorsPermissionGranted = true,
-        onQueryOtherDevicesClicked = {},
-        onQueryMobileCameraClicked = {},
+        //onQueryOtherDevicesClicked = {},
+        //onQueryMobileCameraClicked = {},
         navigateToAppInfo = {},
         hr = 66.toFloat(),
         light = 10.toFloat()
@@ -303,10 +304,9 @@ fun MainAppPreviewEvents() {
 fun MainAppPreviewEmpty() {
     MainApp(
         events = emptyList(),
-        image = null,
         isBodySensorsPermissionGranted = true,
-        onQueryOtherDevicesClicked = {},
-        onQueryMobileCameraClicked = {},
+        //onQueryOtherDevicesClicked = {},
+        //onQueryMobileCameraClicked = {},
         navigateToAppInfo = {},
         hr = 66.toFloat(),
         light = 10.toFloat()
