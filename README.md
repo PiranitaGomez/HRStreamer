@@ -1,32 +1,37 @@
 
-Wear HR Streamer via DataLayer
+Wear HR Streamer
 ========================
 
+This project facilitates the data flow from Wear OS to Android and ultimately to Unity. Data communication from Wear OS to Android is achieved via the DataLayer API using BLE, while data transmission from Android to Unity is handled through the Lab Stream Layer (LSL) framework. The user interfaces on both the Wear OS and Android platforms are built using Jetpack Compose.
+
+
+Wear/Android side
+------------
 The code was developed based on the following resources:
 - Android DataLayer Sample
 - Composesensor library
 
-The code allows the streaming of sensor data from wear devices to handheld devices using the DataLayer, it works with a WearableListenerService,
-to produce and consume DataEvents.
+It enables the streaming of sensor data from wearable devices to handheld devices through the DataLayer. The system utilizes a WearableListenerService to produce and consume DataEvents.
 
-Introduction
-------------
-
-This sample demonstrates how to make a handheld and an Wear device communicate
-using the [DataClient][2].
-It does this by sending a picture between connected devices.
-
-An Activity is being used for both the connected devices which implement their parts of
-the required interfaces using Jetpack Compose.
 
 It showcases how to use an [WearableListenerService][1] to consume DataEvents
-as well as implementations for various required listeners when using the [DataClient][2],
-[MessageClient][3] and [NodeClient][4].
+as well as implementations for various required listeners when using the [DataClient][2].
 
 [1]: https://developers.google.com/android/reference/com/google/android/gms/wearable/WearableListenerService
 [2]: https://developers.google.com/android/reference/com/google/android/gms/wearable/DataClient
-[3]: https://developers.google.com/android/reference/com/google/android/gms/wearable/MessageClient
-[4]: https://developers.google.com/android/reference/com/google/android/gms/wearable/NodeClient
+
+
+
+Unity side
+=== 
+There is a C# script for LSL receiver located at Assets/LSLreceiver.cs
+The scene is extremely simple; it just shows the received HR readings. It's located at Assets/Scenes/SampleScene.unity
+
+There is a LSL plug in in the menu bar LSL->Show Streams. It opens a pane to see the LSL streams found. The HR stream comes with Name="HeartRate", Type="DataLayer", HostName="localhost", DataRate=0 (which means irregular rate).
+
+
+
+
 
 Pre-requisites
 --------------
@@ -36,7 +41,7 @@ Pre-requisites
 Screenshots
 -------------
 
-<img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/> 
+<!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
 
 Getting Started
 ---------------
@@ -55,10 +60,4 @@ Patches are encouraged, and may be submitted by forking this project and
 submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
 
 
-Unity side
-=== 
-There is a C# script for LSL receiver located at Assets/LSLreceiver.cs
-The scene is extremely simple; it just shows the received HR readings. It's located at Assets/Scenes/SampleScene.unity
-
-There is a LSL plug in in the menu bar LSL->Show Streams. It opens a pane to see the LSL streams found. The HR stream comes with Name="HeartRate", Type="DataLayer", HostName="localhost", DataRate=0 (which means irregular rate).
 
