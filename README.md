@@ -31,6 +31,7 @@ There is a LSL plug in in the menu bar LSL->Show Streams. It opens a pane to see
 
 An example of console debugging information of the LSL receiver
 
+'''xml
 <?xml version="1.0"?>
 <info>
 	<name>HeartRate</name>
@@ -53,7 +54,7 @@ An example of console debugging information of the LSL receiver
 	<desc />
 </info>
 
-
+'''
 
 
 
