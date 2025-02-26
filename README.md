@@ -2,7 +2,7 @@
 Wear HR Streamer
 ========================
 
-This project facilitates the data flow from Wear OS to Android and ultimately to Unity. Data communication from Wear OS to Android is achieved via the DataLayer API using BLE, while data transmission from Android to Unity is handled through the Lab Stream Layer (LSL) framework. The user interfaces on both the Wear OS and Android platforms are built using Jetpack Compose.
+This project facilitates the data flow from Wear OS to Android and ultimately to Unity. Data communication from Wear OS to Android is achieved via the DataLayer API using BLE, while data transmission from Android to Unity is handled through the Lab Stream Layer (LSL) framework. The user interfaces on both the Wear OS and Android platforms are built using Jetpack Compose. 
 
 
 Wear/Android side
@@ -37,6 +37,13 @@ Pre-requisites
 --------------
 
 - Android SDK 32
+
+The code was tested on the following devices:
+- Google Pixel Watch 2, Wear OS 4.0
+- OUKITEL WP12 Pro, Android 11
+- Windows 11, Unity 2022.3.18f
+
+
 
 Screenshots
 -------------

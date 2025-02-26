@@ -47,9 +47,7 @@ class ClientDataViewModel(
     application: Application
 ) :
     AndroidViewModel(application),
-    DataClient.OnDataChangedListener,
-    MessageClient.OnMessageReceivedListener,
-    CapabilityClient.OnCapabilityChangedListener {
+    DataClient.OnDataChangedListener {
 
     private val _events = mutableStateListOf<Event>()
 
@@ -58,6 +56,7 @@ class ClientDataViewModel(
      */
     val events: List<Event> = _events
 
+    /*
     /**
      * The currently received image (if any), available to display.
      */
@@ -67,7 +66,7 @@ class ClientDataViewModel(
     var hr by mutableStateOf<Float?>(null)
         private set
 
-    private var loadPhotoJob: Job = Job().apply { complete() }
+    private var loadPhotoJob: Job = Job().apply { complete() }*/
 
     @SuppressLint("VisibleForTests")
     override fun onDataChanged(dataEvents: DataEventBuffer) {
@@ -87,6 +86,7 @@ class ClientDataViewModel(
             }
         )
 
+        /*
         // Do additional work for specific events
         dataEvents.forEach { dataEvent ->
             when (dataEvent.type) {
@@ -105,9 +105,11 @@ class ClientDataViewModel(
                     }
                 }
             }
-        }
+        */
     }
 
+
+    /*
     override fun onMessageReceived(messageEvent: MessageEvent) {
         _events.add(
             Event(
@@ -116,6 +118,7 @@ class ClientDataViewModel(
             )
         )
     }
+
 
     override fun onCapabilityChanged(capabilityInfo: CapabilityInfo) {
         _events.add(
@@ -135,7 +138,7 @@ class ClientDataViewModel(
                 BitmapFactory.decodeStream(inputStream)
             }
         }
-    }
+    }*/
 }
 
 /**

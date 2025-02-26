@@ -43,6 +43,7 @@ class DataLayerListenerService : WearableListenerService() {
         dataEvents.forEach { dataEvent ->
             val uri = dataEvent.dataItem.uri
             when (uri.path) {
+                /*
                 COUNT_PATH -> {
                     scope.launch {
                         try {
@@ -61,7 +62,7 @@ class DataLayerListenerService : WearableListenerService() {
                             Log.d(TAG, "Count Message failed")
                         }
                     }
-                }
+                }*/
 
                 HR_PATH -> {
                     scope.launch {
@@ -106,6 +107,7 @@ class DataLayerListenerService : WearableListenerService() {
         }
     }
 
+
     override fun onMessageReceived(messageEvent: MessageEvent) {
         super.onMessageReceived(messageEvent)
 
@@ -134,7 +136,6 @@ class DataLayerListenerService : WearableListenerService() {
         const val IMAGE_KEY = "photo"
 
         const val HR_PATH = "/hr"
-        const val HR_KEY = "hr"
         const val LIGHT_PATH = "/light"
     }
 }

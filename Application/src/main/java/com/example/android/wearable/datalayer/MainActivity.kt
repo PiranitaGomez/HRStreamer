@@ -118,11 +118,6 @@ class MainActivity : ComponentActivity() {
         }*/
 
 
-
-        /*val intent = Intent(this, DataLayerListenerService::class.java)
-        //intent.putExtra("HR", clientDataViewModel.heartrate)
-        startActivity(intent*/
-
         setContent {
             MaterialTheme {
                 MainApp(
