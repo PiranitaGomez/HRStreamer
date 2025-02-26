@@ -29,6 +29,30 @@ The scene is extremely simple; it just shows the received HR readings. It's loca
 
 There is a LSL plug in in the menu bar LSL->Show Streams. It opens a pane to see the LSL streams found. The HR stream comes with Name="HeartRate", Type="DataLayer", HostName="localhost", DataRate=0 (which means irregular rate).
 
+An example of console debugging information of the LSL receiver
+
+<?xml version="1.0"?>
+<info>
+	<name>HeartRate</name>
+	<type>DataLayer</type>
+	<channel_count>3</channel_count>
+	<channel_format>int32</channel_format>
+	<source_id>PixelWatch</source_id>
+	<nominal_srate>0.000000</nominal_srate>
+	<version>1.100000</version>
+	<created_at>413934.535274</created_at>
+	<uid>5a2e51d0-6162-44a9-b6e0-e719ecf2fea0</uid>
+	<session_id>default</session_id>
+	<hostname>localhost</hostname>
+	<v4address />
+	<v4data_port>16572</v4data_port>
+	<v4service_port>16572</v4service_port>
+	<v6address />
+	<v6data_port>16574</v6data_port>
+	<v6service_port>16573</v6service_port>
+	<desc />
+</info>
+
 
 
 

@@ -197,7 +197,7 @@ class MainActivity : ComponentActivity() {
             try {
                 val request = PutDataMapRequest.create(HR_PATH).apply {
                     dataMap.putFloat(HR_KEY, hr!!)
-                    dataMap.putLong(HR_SEND_TIME_KEY, System.currentTimeMillis())//Instant.now().epochSecond)
+                    dataMap.putLong(HR_SEND_TIME_KEY, Instant.now().toEpochMilli()) //System.currentTimeMillis()) , Instant.now().epochSecond
                 }
                     .asPutDataRequest()
                     .setUrgent()

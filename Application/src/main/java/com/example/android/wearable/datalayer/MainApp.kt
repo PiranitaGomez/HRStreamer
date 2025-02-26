@@ -105,7 +105,7 @@ fun MainApp(
                     style = MaterialTheme.typography.subtitle1
                 )
                 Text(
-                    text = if (hrtime != null) "${Instant.ofEpochSecond(hrtime).atZone(ZoneId.of(timezone)).toLocalDateTime()}" else "$nowtimestamp",
+                    text = if (hrtime != null) "${Instant.ofEpochMilli(hrtime).atZone(ZoneId.of(timezone)).toLocalDateTime()}" else "$nowtimestamp",
                     //text = "Heart Rate: ",
                     textAlign = TextAlign.Center,
                     fontSize = 20.sp,

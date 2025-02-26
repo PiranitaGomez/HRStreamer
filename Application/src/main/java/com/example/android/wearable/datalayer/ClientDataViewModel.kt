@@ -185,7 +185,8 @@ class ClientDataViewModel :
                                     .dataMap
                                     .getLong(HR_TIME_KEY)
 
-                                //Log.d("ClientDataViewModel", "heart rate extracted")
+                                Log.d(TAG1, "Wear Send Time:$hrsendtime")
+                                Log.d(TAG1, "Android Receive Time:${System.currentTimeMillis()}")
 
                                 sendDataHR(heartrate, hrsendtime)
                             }
@@ -212,7 +213,7 @@ class ClientDataViewModel :
     }
 
     companion object {
-        private const val TAG = "AndroidViewModel"
+        private const val TAG1 = "AndroidViewModel"
         private const val TAG2 = "LSL"
         const val HR_PATH = "/hr"
         const val HR_KEY = "hr"
