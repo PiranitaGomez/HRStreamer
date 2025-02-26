@@ -175,29 +175,29 @@ class ClientDataViewModel :
                 DataEvent.TYPE_CHANGED -> {
                     when (dataEvent.dataItem.uri.path) {
 
-                            DataLayerListenerService.HR_PATH -> {
+                            HR_PATH -> {
                                 heartrate = DataMapItem.fromDataItem(dataEvent.dataItem)
                                         .dataMap
-                                        .getFloat(DataLayerListenerService.HR_KEY)
+                                        .getFloat(HR_KEY)
 
                                 hrsendtime = DataMapItem.fromDataItem(dataEvent.dataItem)
                                     .dataMap
-                                    .getLong(DataLayerListenerService.HR_TIME_KEY)
+                                    .getLong(HR_TIME_KEY)
 
                                 //Log.d("ClientDataViewModel", "heart rate extracted")
 
                                 sendDataHR(heartrate, hrsendtime)
                             }
 
-                            DataLayerListenerService.LIGHT_PATH -> {
+                            LIGHT_PATH -> {
 
                                 light = DataMapItem.fromDataItem(dataEvent.dataItem)
                                     .dataMap
-                                    .getFloat(DataLayerListenerService.LIGHT_KEY)
+                                    .getFloat(LIGHT_KEY)
 
                                 lighttime = DataMapItem.fromDataItem(dataEvent.dataItem)
                                     .dataMap
-                                    .getLong(DataLayerListenerService.LIGHT_TIME_KEY)
+                                    .getLong(LIGHT_TIME_KEY)
 
                                 //Log.d("ClientDataViewModel", "light extracted")
                             }
@@ -231,6 +231,22 @@ class ClientDataViewModel :
     fun onPictureTaken(bitmap: Bitmap?) {
         image = bitmap ?: return
     }
+
+    companion object {
+        private const val TAG = "DataLayerListenerService"
+        private const val START_ACTIVITY_PATH = "/start-activity"
+        private const val DATA_ITEM_RECEIVED_PATH = "/data-item-received"
+        const val COUNT_PATH = "/count"
+        const val IMAGE_PATH = "/image"
+        const val IMAGE_KEY = "photo"
+        const val HR_PATH = "/hr"
+        const val HR_KEY = "hr"
+        const val HR_TIME_KEY = "hr_time"
+        const val LIGHT_PATH = "/light"
+        const val LIGHT_KEY = "light"
+        const val LIGHT_TIME_KEY = "light_time"
+    }
+
 }
 
 /**
