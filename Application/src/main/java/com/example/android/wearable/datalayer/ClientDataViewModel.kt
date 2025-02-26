@@ -19,34 +19,37 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.AsyncTask
 import android.util.Log
-import androidx.annotation.Nullable
 import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.google.android.gms.wearable.CapabilityClient
-import com.google.android.gms.wearable.CapabilityInfo
+
 import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.DataEvent
 import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.DataMapItem
-import com.google.android.gms.wearable.MessageClient
-import com.google.android.gms.wearable.MessageEvent
+//import com.google.android.gms.wearable.MessageClient
+//import com.google.android.gms.wearable.MessageEvent
+//import com.google.android.gms.wearable.CapabilityClient
+//import com.google.android.gms.wearable.CapabilityInfo
 import edu.ucsd.sccn.LSL
 import java.io.IOException
-import java.time.Instant
-import kotlinx.coroutines.Job
+//import java.time.Instant
+//import kotlinx.coroutines.Job
 
 /**
- * A state holder for the client data.
+ * A state holder for the client data. Also interface the OnDataChangedListener
  */
 class ClientDataViewModel :
     ViewModel(),
-    DataClient.OnDataChangedListener,
-    MessageClient.OnMessageReceivedListener,
-    CapabilityClient.OnCapabilityChangedListener {
+    DataClient.OnDataChangedListener {
+
+    // Interfacing; not using DataLayerListenerService
+    // commented out MessageClient and CapabilityClient cuz we don't use them in this app
+    //MessageClient.OnMessageReceivedListener,
+    //CapabilityClient.OnCapabilityChangedListener
 
     private val _events = mutableStateListOf<Event>()
 
@@ -74,9 +77,8 @@ class ClientDataViewModel :
     //// LSL Outlet
     val LSL_OUTLET_NAME_HR = "HeartRate"
     val LSL_OUTLET_TYPE_HR = "DataLayer"
-    val LSL_OUTLET_CHANNELS_HR = 3 // One channel for HR data, one channel for sendtime, one channel for relay time
+    val LSL_OUTLET_CHANNELS_HR = 3 // One channel for HR data, one channel for sendtime, one channel for relaytime
     val LSL_OUTLET_NOMINAL_RATE_HR = LSL.IRREGULAR_RATE
-    //val LSL_OUTLET_CHANNEL_FORMAT_HR = LSL.ChannelFormat.int16
     val LSL_OUTLET_CHANNEL_FORMAT_HR = LSL.ChannelFormat.int32
     val DEVICE_ID = "PixelWatch"
     var info_HR: LSL.StreamInfo? = null
@@ -89,15 +91,14 @@ class ClientDataViewModel :
         //Log.d("LSL", "samples_HR: $samples_HR")
 
         samples_HR[0] = data!!.toInt()
-        Log.d("LSL", "Now sending HR:$data")
+        Log.d(TAG2, "Now sending HR:$data")
 
         samples_HR[1] = (timestamp!! % 100000).toInt() // not able to send long format, so only truncate the lower 5 digits
-        Log.d("LSL", "Now send_timestamp:$timestamp")
+        Log.d(TAG2, "Now send_timestamp:$timestamp")
 
         samples_HR[2] = (System.currentTimeMillis() % 100000).toInt()
         //samples_HR[2] = Instant.now().epochSecond.toInt()
-        Log.d("LSL", "Now relay_timestamp_long:${System.currentTimeMillis()}")
-        Log.d("LSL", "Now relay_timestamp_second:${(System.currentTimeMillis() % 100000).toInt()}")
+        Log.d(TAG2, "Now relay_timestamp_long:${System.currentTimeMillis()}")
 
         try {
             /*final String dataString = Integer.toString(data);
@@ -107,12 +108,12 @@ class ClientDataViewModel :
                     showMessage("Now sending HR: " + dataString);
                 }
             });*/
-            Log.e("LSL", "Pushing samples_HR:$samples_HR")
+            Log.d(TAG2, "Pushing samples_HR:$samples_HR")
             outlet_HR!!.push_sample(samples_HR)
             //Thread.sleep(5);
         } catch (ex: java.lang.Exception) {
             //ex.message?.let { showMessage(it) }
-            Log.e("LSL", "Failed to push sample:")
+            Log.e(TAG2, "Failed to push sample:")
             outlet_HR!!.close()
             info_HR!!.destroy()
         }
@@ -131,7 +132,7 @@ class ClientDataViewModel :
 
         AsyncTask.execute(Runnable { // configure HR
             //showMessage("Creating a new StreamInfo HR...")
-            Log.e("LSL", "Creating a new StreamInfo HR...")
+            Log.d(TAG2, "Creating a new StreamInfo HR...")
             info_HR = LSL.StreamInfo(
                 LSL_OUTLET_NAME_HR,
                 LSL_OUTLET_TYPE_HR,
@@ -141,14 +142,14 @@ class ClientDataViewModel :
                 DEVICE_ID // Is this device id absolutely necessary?
             )
             //showMessage("Creating an outlet HR...")
-            Log.e("LSL", "Creating an outlet HR...")
+            Log.d(TAG2, "Creating an outlet HR...")
             //Log.d("LSL", "Value:$info_HR")
             outlet_HR = try {
-                Log.e("LSL", "LSL outlet opened in DataLayerListenerService!!!")
+                Log.e(TAG2, "LSL outlet opened in Android View Model!!!")
                 LSL.StreamOutlet(info_HR)
             } catch (ex: IOException) {
                 //showMessage("Unable to open LSL outlet. Have you added <uses-permission android:name=\"android.permission.INTERNET\" /> to your manifest file?")
-                Log.e("LSL", "Unable to open LSL outlet. Have you added <uses-permission android:name=\"android.permission.INTERNET\" /> to your manifest file?")
+                Log.e(TAG2, "Unable to open LSL outlet. Have you added <uses-permission android:name=\"android.permission.INTERNET\" /> to your manifest file?")
                 return@Runnable
             }
         })}
@@ -210,6 +211,18 @@ class ClientDataViewModel :
 
     }
 
+    companion object {
+        private const val TAG = "AndroidViewModel"
+        private const val TAG2 = "LSL"
+        const val HR_PATH = "/hr"
+        const val HR_KEY = "hr"
+        const val HR_TIME_KEY = "hr_time"
+        const val LIGHT_PATH = "/light"
+        const val LIGHT_KEY = "light"
+        const val LIGHT_TIME_KEY = "light_time"
+    }
+
+    /*
     override fun onMessageReceived(messageEvent: MessageEvent) {
         _events.add(
             Event(
@@ -230,22 +243,7 @@ class ClientDataViewModel :
 
     fun onPictureTaken(bitmap: Bitmap?) {
         image = bitmap ?: return
-    }
-
-    companion object {
-        private const val TAG = "DataLayerListenerService"
-        private const val START_ACTIVITY_PATH = "/start-activity"
-        private const val DATA_ITEM_RECEIVED_PATH = "/data-item-received"
-        const val COUNT_PATH = "/count"
-        const val IMAGE_PATH = "/image"
-        const val IMAGE_KEY = "photo"
-        const val HR_PATH = "/hr"
-        const val HR_KEY = "hr"
-        const val HR_TIME_KEY = "hr_time"
-        const val LIGHT_PATH = "/light"
-        const val LIGHT_KEY = "light"
-        const val LIGHT_TIME_KEY = "light_time"
-    }
+    }*/
 
 }
 

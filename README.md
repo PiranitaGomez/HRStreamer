@@ -53,3 +53,12 @@ If you've found an error in this sample, please file an issue in the issue track
 
 Patches are encouraged, and may be submitted by forking this project and
 submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
+
+
+Unity side
+=== 
+There is a C# script for LSL receiver located at Assets/LSLreceiver.cs
+The scene is extremely simple; it just shows the received HR readings. It's located at Assets/Scenes/SampleScene.unity
+
+There is a LSL plug in in the menu bar LSL->Show Streams. It opens a pane to see the LSL streams found. The HR stream comes with Name="HeartRate", Type="DataLayer", HostName="localhost", DataRate=0 (which means irregular rate).
+

@@ -84,11 +84,12 @@ class MainActivity : ComponentActivity() {
 
     private val clientDataViewModel by viewModels<ClientDataViewModel>()
 
+    /*
     private val takePhotoLauncher = registerForActivityResult(
         ActivityResultContracts.TakePicturePreview()
     ) { bitmap ->
         clientDataViewModel.onPictureTaken(bitmap = bitmap)
-    }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,7 +150,7 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         dataClient.addListener(clientDataViewModel)
-        messageClient.addListener(clientDataViewModel)
+        /*messageClient.addListener(clientDataViewModel)
         capabilityClient.addListener(
             clientDataViewModel,
             Uri.parse("wear://"),
@@ -166,15 +167,15 @@ class MainActivity : ComponentActivity() {
                     Log.e(TAG, "Could not add capability: $exception")
                 }
             }
-        }
+        }*/
     }
 
     override fun onPause() {
         super.onPause()
         dataClient.removeListener(clientDataViewModel)
-        messageClient.removeListener(clientDataViewModel)
-        capabilityClient.removeListener(clientDataViewModel)
-
+        //messageClient.removeListener(clientDataViewModel)
+        //capabilityClient.removeListener(clientDataViewModel)
+        /*
         lifecycleScope.launch {
             // This is a judicious use of NonCancellable.
             // This is asynchronous clean-up, since the capability is no longer available.
@@ -187,7 +188,7 @@ class MainActivity : ComponentActivity() {
                     Log.e(TAG, "Could not remove capability: $exception")
                 }
             }
-        }
+        }*/
     }
 
 
@@ -217,11 +218,13 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    /*
     private fun takePhoto() {
         if (!isCameraSupported) return
         takePhotoLauncher.launch(null)
-    }
+    }*/
 
+    /*
     private fun sendPhoto() {
         lifecycleScope.launch {
             try {
@@ -272,21 +275,23 @@ class MainActivity : ComponentActivity() {
                 compress(Bitmap.CompressFormat.PNG, 100, byteStream)
                 Asset.createFromBytes(byteStream.toByteArray())
             }
-        }
+        }*/
 
     companion object {
         private const val TAG = "MainActivity"
 
         private const val START_ACTIVITY_PATH = "/start-activity"
+        private const val WEAR_CAPABILITY = "wear"
+
+        /*
+        private val countInterval = Duration.ofSeconds(5)
         private const val COUNT_PATH = "/count"
         private const val IMAGE_PATH = "/image"
         private const val IMAGE_KEY = "photo"
         private const val TIME_KEY = "time"
         private const val COUNT_KEY = "count"
         private const val CAMERA_CAPABILITY = "camera"
-        private const val WEAR_CAPABILITY = "wear"
-
-        private val countInterval = Duration.ofSeconds(5)
+        */
     }
 
 }
