@@ -1,11 +1,7 @@
 /*
- * Copyright 2025 HRStreamer
+ * Copyright 2025 The HR Streamer Project
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ * Licensed under the MIT License
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +15,6 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -45,10 +40,7 @@ import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import com.mutualmobile.composesensors.rememberHeartRateSensorState
 import com.mutualmobile.composesensors.rememberLightSensorState
-//import edu.ucsd.sccn.LSL
-import java.io.IOException
 import java.time.Instant
-import java.time.ZoneId
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -56,7 +48,7 @@ import kotlinx.coroutines.tasks.await
 class MainActivity : ComponentActivity() {
 
     private val dataClient by lazy { Wearable.getDataClient(this) }
-    private val messageClient by lazy { Wearable.getMessageClient(this) }
+    //private val messageClient by lazy { Wearable.getMessageClient(this) }
     private val capabilityClient by lazy { Wearable.getCapabilityClient(this) }
 
     private val clientDataViewModel by viewModels<ClientDataViewModel>()
@@ -66,10 +58,6 @@ class MainActivity : ComponentActivity() {
             return checkSelfPermission(Manifest.permission.BODY_SENSORS) ==
                 PackageManager.PERMISSION_GRANTED
         }
-
-    /*
-    var heartRate by mutableStateOf<Float?>(null)
-        private set*/
 
     private val hr: Float
         @Composable
@@ -93,15 +81,13 @@ class MainActivity : ComponentActivity() {
             MainApp(
                 events = clientDataViewModel.events,
                 isBodySensorsPermissionGranted = isBodySensorsPermissionGranted,
-                //onQueryOtherDevicesClicked = ::onQueryOtherDevicesClicked,
-                //onQueryMobileCameraClicked = ::onQueryMobileCameraClicked,
                 navigateToAppInfo = ::navigateToAppInfo,
                 hr = hr,
                 light = light
             )
 
-            sendHR(hr) //send to hand-held device
-            sendLight(light) //send to hand-held device
+            sendHR(hr) //send to Android device
+            sendLight(light) //send to Android device
 
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) // Set screen always on
 
@@ -110,79 +96,10 @@ class MainActivity : ComponentActivity() {
 
     }
 
-    /*
-    private fun onQueryOtherDevicesClicked() {
-        lifecycleScope.launch {
-            try {
-                val nodes = getCapabilitiesForReachableNodes()
-                    .filterValues { MOBILE_CAPABILITY in it || WEAR_CAPABILITY in it }.keys
-                displayNodes(nodes)
-            } catch (cancellationException: CancellationException) {
-                throw cancellationException
-            } catch (exception: Exception) {
-                Log.d(TAG, "Querying nodes failed: $exception")
-            }
-        }
-    }
-
-    private fun onQueryMobileCameraClicked() {
-        lifecycleScope.launch {
-            try {
-                val nodes = getCapabilitiesForReachableNodes()
-                    .filterValues { MOBILE_CAPABILITY in it && CAMERA_CAPABILITY in it }.keys
-                displayNodes(nodes)
-            } catch (cancellationException: CancellationException) {
-                throw cancellationException
-            } catch (exception: Exception) {
-                Log.d(TAG, "Querying nodes failed: $exception")
-            }
-        }
-    }*/
-
-    /**
-     * Collects the capabilities for all nodes that are reachable using the [CapabilityClient].
-     *
-     * [CapabilityClient.getAllCapabilities] returns this information as a [Map] from capabilities
-     * to nodes, while this function inverts the map so we have a map of [Node]s to capabilities.
-     *
-     * This form is easier to work with when trying to operate upon all [Node]s.
-     */
-    private suspend fun getCapabilitiesForReachableNodes(): Map<Node, Set<String>> =
-        capabilityClient.getAllCapabilities(CapabilityClient.FILTER_REACHABLE)
-            .await()
-            // Pair the list of all reachable nodes with their capabilities
-            .flatMap { (capability, capabilityInfo) ->
-                capabilityInfo.nodes.map { it to capability }
-            }
-            // Group the pairs by the nodes
-            .groupBy(
-                keySelector = { it.first },
-                valueTransform = { it.second }
-            )
-            // Transform the capability list for each node into a set
-            .mapValues { it.value.toSet() }
-
-    private fun displayNodes(nodes: Set<Node>) {
-        val message = if (nodes.isEmpty()) {
-            getString(R.string.no_device)
-        } else {
-            getString(R.string.connected_nodes, nodes.joinToString(", ") { it.displayName })
-        }
-
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
     override fun onResume() {
         super.onResume()
         dataClient.addListener(clientDataViewModel)
         //messageClient.addListener(clientDataViewModel)
-        /*
-        capabilityClient.addListener(
-            clientDataViewModel,
-            Uri.parse("wear://"),
-            CapabilityClient.FILTER_REACHABLE
-        )
-        */
     }
 
     override fun onPause() {
@@ -244,21 +161,12 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         private const val TAG = "WearMainActivity"
-
-        private const val CAMERA_CAPABILITY = "camera"
-        private const val WEAR_CAPABILITY = "wear"
-        private const val MOBILE_CAPABILITY = "mobile"
-        private const val START_ACTIVITY_PATH = "/start-activity"
-        private const val COUNT_PATH = "/count"
         private const val HR_PATH = "/hr"
         private const val HR_KEY = "hr"
         private const val HR_SEND_TIME_KEY = "hr_time"
         private const val LIGHT_PATH = "/light"
         private const val LIGHT_KEY = "light"
         private const val LIGHT_TIME_KEY = "light_time"
-        private const val TIME_KEY = "time"
-        private const val COUNT_KEY = "count"
-
     }
 }
 

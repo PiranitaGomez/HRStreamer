@@ -1,11 +1,7 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2025 The HR Streamer Project
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ * Licensed under the MIT License
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -56,13 +52,14 @@ class ClientDataViewModel :
     /**
      * The list of events from the clients.
      */
-    val events: List<Event> = _events
+    //val events: List<Event> = _events
 
     /**
      * The currently captured image (if any), available to send to the wearable devices.
      */
-    var image by mutableStateOf<Bitmap?>(null)
-        private set
+    //var image by mutableStateOf<Bitmap?>(null)
+    //    private set
+
     var heartrate by mutableStateOf<Float?>(null)
         private set
     var light by mutableStateOf<Float?>(null)
@@ -201,7 +198,6 @@ class ClientDataViewModel :
                                     .dataMap
                                     .getLong(LIGHT_TIME_KEY)
 
-                                //Log.d("ClientDataViewModel", "light extracted")
                             }
 
                     }

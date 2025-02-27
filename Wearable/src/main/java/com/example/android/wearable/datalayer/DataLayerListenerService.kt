@@ -1,11 +1,7 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2025 The HR Streamer Project
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ * Licensed under the MIT License
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,26 +39,6 @@ class DataLayerListenerService : WearableListenerService() {
         dataEvents.forEach { dataEvent ->
             val uri = dataEvent.dataItem.uri
             when (uri.path) {
-                /*
-                COUNT_PATH -> {
-                    scope.launch {
-                        try {
-                            val nodeId = uri.host!!
-                            val payload = uri.toString().toByteArray()
-                            messageClient.sendMessage(
-                                nodeId,
-                                DATA_ITEM_RECEIVED_PATH,
-                                payload
-                            )
-                                .await()
-                            Log.d(TAG, "Count Message sent successfully")
-                        } catch (cancellationException: CancellationException) {
-                            throw cancellationException
-                        } catch (exception: Exception) {
-                            Log.d(TAG, "Count Message failed")
-                        }
-                    }
-                }*/
 
                 HR_PATH -> {
                     scope.launch {
@@ -127,13 +103,10 @@ class DataLayerListenerService : WearableListenerService() {
     }
 
     companion object {
-        private const val TAG = "DataLayerService"
+        private const val TAG = "WearDataLayerService"
 
         private const val START_ACTIVITY_PATH = "/start-activity"
         private const val DATA_ITEM_RECEIVED_PATH = "/data-item-received"
-        const val COUNT_PATH = "/count"
-        const val IMAGE_PATH = "/image"
-        const val IMAGE_KEY = "photo"
 
         const val HR_PATH = "/hr"
         const val LIGHT_PATH = "/light"
