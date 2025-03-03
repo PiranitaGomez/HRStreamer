@@ -7,12 +7,11 @@ This project facilitates the data flow from Wear OS to Android and ultimately to
 
 Wear/Android side
 ------------
+This consists of a Wear OS app that runs on the Google Pixel Watch, and an Android app that runs on an Android smartphone. The apps work together to enable the streaming of sensor data from wearable devices to handheld devices through the DataLayer. The system utilizes a WearableListenerService to produce and consume DataEvents.
+
 The code was developed based on the following resources:
 - Android DataLayer Sample
 - Composesensor library
-
-It enables the streaming of sensor data from wearable devices to handheld devices through the DataLayer. The system utilizes a WearableListenerService to produce and consume DataEvents.
-
 
 It showcases how to use an [WearableListenerService][1] to consume DataEvents
 as well as implementations for various required listeners when using the [DataClient][2].
@@ -20,6 +19,10 @@ as well as implementations for various required listeners when using the [DataCl
 [1]: https://developers.google.com/android/reference/com/google/android/gms/wearable/WearableListenerService
 [2]: https://developers.google.com/android/reference/com/google/android/gms/wearable/DataClient
 
+For further development, the following IDE is required:
+- Android Studio (with Android SDK platform-tools including ADB installed)
+- USB debugging enabled on Android device and Watch. This option is typically found in the Developer Options menu on the device, which can be enabled by tapping the build number in the About Phone section of device settings multiple (7?) times.
+- Use a USB cable to connect the devices to the PC for testing
 
 
 Unity side
