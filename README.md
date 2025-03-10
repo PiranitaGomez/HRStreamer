@@ -1,4 +1,4 @@
-# HR Streamer
+# HRStreamer
 
 ![Contributors](https://img.shields.io/badge/contributor-PiranitaGomez-green)
 
@@ -27,7 +27,6 @@ The `HRStreamer` is a software ecosystem that facilitates the data flow from Wea
 
 
 ## Wear/Android side
-------------
 This consists of a Wear OS companion app that runs on the Google Pixel Watch, and an Android app that runs on an Android smartphone. The apps work together to enable the streaming of heart rate data from a wearable device to a handheld Android device using the Wear Data Layer API. The Wear OS app utilizes a [`WearableListenerService`][1] to consume and transmit DataEvents, while the Android app implements the [`DataClient.OnDataChangedListener` interface][2].
 
 The code was developed based on the following resources:
@@ -36,6 +35,8 @@ The code was developed based on the following resources:
 
 [1]: https://developers.google.com/android/reference/com/google/android/gms/wearable/WearableListenerService
 [2]: https://developers.google.com/android/reference/com/google/android/gms/wearable/DataClient
+[3]: https://github.com/android/wear-os-samples/tree/main/DataLayer
+[4]: https://github.com/mutualmobile/ComposeSensors
 
 For further development, the following IDE is required:
 - Android Studio (with Android SDK platform-tools including ADB installed)
@@ -44,7 +45,8 @@ For further development, the following IDE is required:
 
 
 ## Unity side
-=== 
+This consists of ...
+
 There is a C# script for LSL receiver located at Assets/LSLreceiver.cs
 The scene is extremely simple; it just shows the received HR readings. It's located at Assets/Scenes/SampleScene.unity
 
@@ -85,39 +87,32 @@ The code was tested on the following devices:
 
 # How to use?
 
-## Pair up watch and phone
---------------
+## Step1: Pair up watch and phone
 - Download and install the Wear OS app and the Watch app on the Android smartphone 
 - Pair up the Google Pixel Watch with the Android smartphone in the Watch app
 
 <!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
 
 
-## Install HRStreamer apps on the watch and phone
+## Step 2: Install HRStreamer apps on the watch and phone
 - Download and install the HRStreamer Wear app on the Pixel Watch
 - Download and install the HRStreamer Android app on the Android smartphone
 
 <!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
 
 
-## Set up Unity environment and add script 
+## Step 3: Set up Unity environment and add script 
 - 
 
 <!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
 
-## Start streaming
+## Step 4: Start streaming
 - Make sure the Pixel Watch is connected to the Android smartphone via BLE, then open the HRStreamer Android app on the smartphone, tap the "start wear activity" button to start streaming.
 
 <!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
 
-# Trouble shooting
 
-## Not able to start streaming on Android phone
-
-## LSL stream not detected in Unity
-
-
-## Cite the research paper
+# Cite the research paper
 
 If the `HRStreamer` is useful for your research, please consider citing the following paper:
 
@@ -132,9 +127,15 @@ If the `HRStreamer` is useful for your research, please consider citing the foll
 }
 ```
 
-## Lab Homepage
+# Trouble shooting
+
+## Not able to start streaming on Android phone
+
+## LSL stream not detected in Unity
+
+# Lab Homepage
 More details of this project, as well as other project of our research group, feel free to drop by the homepage of our ubicomp lab (<http://www.ubicomp-lab.org>) . 
 
-## Funding
+# Funding
 This work was supported by the JSPS Grant-in-Aid for Scientific Research (B) (Grant Number: 23K25701)
 
