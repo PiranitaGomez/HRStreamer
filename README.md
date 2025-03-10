@@ -1,7 +1,24 @@
+# HR Streamer
 
-Wear HR Streamer
-========================
+![Contributors](https://img.shields.io/badge/contributor-PiranitaGomez-green)
 
+*Quick links*
+
+- [Description](#description)
+- [How to use?](#how-to-use)
+  - [Unity prerequisites](#unity-prerequisites)
+  - [Measure bodily data from wearables](#measure-bodily-data-from-wearables)
+  - [Importing package in Unity](#importing-package-in-unity)
+  - [Example](#example)
+  - [Cite the research paper](#cite-the-research-paper)
+- [How to contribute?](#how-to-contribute)
+- [More information](#more-information)
+  - [Project's website](#projects-website)
+  - [More research papers about the `Excite-O-Meter`](#more-research-papers-about-the-excite-o-meter)
+
+---
+
+# Description
 This project facilitates the data flow from Wear OS to Android and ultimately to Unity. Data communication from Wear OS to Android is achieved via the DataLayer API using BLE, while data transmission from Android to Unity is handled through the Lab Stream Layer (LSL) framework. The user interfaces on both the Wear OS and Android platforms are built using Jetpack Compose. 
 
 
