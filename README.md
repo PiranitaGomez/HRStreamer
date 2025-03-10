@@ -6,8 +6,8 @@
 
 - [Description](#description)
 - [How to use?](#how-to-use)
+  - [Measure heart rate using Google Pixel Watch](#measure-heart-rate-using-google-pixel-watch)
   - [Unity prerequisites](#unity-prerequisites)
-  - [Measure bodily data from wearables](#measure-bodily-data-from-wearables)
   - [Importing package in Unity](#importing-package-in-unity)
   - [Example](#example)
   - [Cite the research paper](#cite-the-research-paper)
@@ -21,6 +21,11 @@
 # Description
 This project facilitates the data flow from Wear OS to Android and ultimately to Unity. Data communication from Wear OS to Android is achieved via the DataLayer API using BLE, while data transmission from Android to Unity is handled through the Lab Stream Layer (LSL) framework. The user interfaces on both the Wear OS and Android platforms are built using Jetpack Compose. 
 
+
+# How to use?
+
+
+## Measure heart rate using Google Pixel Watch
 
 Wear/Android side
 ------------
@@ -95,21 +100,20 @@ Screenshots
 
 <!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
 
-Getting Started
----------------
 
-This sample uses the Gradle build system. To build this project, use the
-"gradlew build" command or use "Import Project" in Android Studio.
+## Cite the research paper
 
-Support
--------
+If the `HRStreamer` is useful for your research, please consider citing the following paper:
 
-- Stack Overflow: https://stackoverflow.com/questions/tagged/wear-os
+> Liang Z. <a href="https://www.researchgate.net/publication/387920640_Harnessing_Consumer_Smartwatches_for_Heart_Rate_Streaming_in_Unity_Game_Engine"> Harnessing Consumer Smartwatches for Heart Rate Streaming in Unity Game Engine </a>. In: *2024 IEEE Consumer Life Tech Conference (ICLT 2024)*. Sydney, Australia; 2024.
 
-If you've found an error in this sample, please file an issue in the issue tracker.
-
-Patches are encouraged, and may be submitted by forking this project and
-submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
-
+```tex
+@inproceedings{liang2024harnessing,
+    author = {Liang, Zilu},
+    title = {{Harnessing Consumer Smartwatches for Heart Rate Streaming in Unity Game Engine}},
+    booktitle = {2024 IEEE Consumer Life Tech Conference (ICLT 2024)},
+    year = {2024}
+}
+```
 
 
