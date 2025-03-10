@@ -95,9 +95,9 @@ The code was tested on the following devices:
 
 <!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
 
-* Note: the data layer APIs are the only APIs possible for set up communication between Pixel Watch and Android phone. It is not possible to open low-level sockets to create communication channel. See [here][1]
+* Note: the data layer APIs are the only APIs possible for set up communication between Pixel Watch and Android phone. It is not possible to open low-level sockets to create communication channel. See [here][DataLayerAPI].
 
-[1]: https://developer.android.com/training/wearables/data/overview
+[DataLayerAPI]: https://developer.android.com/training/wearables/data/overview
 
 
 ## Step 2: Install HRStreamer apps on the watch and phone
@@ -108,7 +108,7 @@ The code was tested on the following devices:
 
 
 ## Step 3: Set up Unity environment and add script 
-- Add the LSL4Unity package to your Unity environment by following the steps [here][1]
+- Add the LSL4Unity package to your Unity environment by following the steps [here][LSL4Unity]
 - There is a C# script for LSL receiver located at Assets/LSLreceiver.cs.
 The script `LSLreceiver.cs` can be attached to any existing scene to read the heart rate readings sent from the Android smartphone and be processed as desired.
 - (Optional) In the menu bar, open the ???? plug in to lookup on going LSL streams.
@@ -116,8 +116,8 @@ The script `LSLreceiver.cs` can be attached to any existing scene to read the he
 
 <!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
 
-[1]: https://github.com/labstreaminglayer/LSL4Unity
-[2]: https://github.com/labstreaminglayer/liblsl-Csharp/blob/master/README-Unity.md
+[LSL4Unity]: https://github.com/labstreaminglayer/LSL4Unity
+[liblsl]: https://github.com/labstreaminglayer/liblsl-Csharp/blob/master/README-Unity.md
 
 ## Step 4: Start streaming
 
@@ -153,9 +153,9 @@ This paper also discusses the feasibility and pros/cons of other system architec
 Consider disable the firewall or modify the firewall settings.
 
 ## More resources for trouble shooting
-- The LSL connections can be easily affected by network configurations, check out the [LSL Official Network Troubleshooting][1] documentation for insights and wisdom
+- The LSL connections can be easily affected by network configurations, check out the [LSL Official Network Troubleshooting][LSLtroubleshooting] documentation for insights and wisdom
 
-[1]: https://labstreaminglayer.readthedocs.io/info/network-connectivity.html#wireless-connections
+[LSLtroubleshooting]: https://labstreaminglayer.readthedocs.io/info/network-connectivity.html#wireless-connections
 
 
 # Miscellaneous
