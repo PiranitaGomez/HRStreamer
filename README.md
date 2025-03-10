@@ -95,7 +95,9 @@ The code was tested on the following devices:
 
 <!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
 
-* Note: it is not possible to connect the watch and the phone using low-level BLE socket, see Wear OS development documentation [??]
+* Note: the data layer APIs are the only APIs possible for set up communication between Pixel Watch and Android phone. It is not possible to open low-level sockets to create communication channel. See [here][1]
+
+[1]: https://developer.android.com/training/wearables/data/overview
 
 
 ## Step 2: Install HRStreamer apps on the watch and phone
@@ -114,8 +116,8 @@ The script `LSLreceiver.cs` can be attached to any existing scene to read the he
 
 <!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
 
-[1] https://github.com/labstreaminglayer/LSL4Unity
-[2] https://github.com/labstreaminglayer/liblsl-Csharp/blob/master/README-Unity.md
+[1]: https://github.com/labstreaminglayer/LSL4Unity
+[2]: https://github.com/labstreaminglayer/liblsl-Csharp/blob/master/README-Unity.md
 
 ## Step 4: Start streaming
 
@@ -140,16 +142,20 @@ If the `HRStreamer` is useful for your research, please consider citing the foll
 }
 ```
 
+This paper also discusses the feasibility and pros/cons of other system architecture designs for the HRStreamer.
+
+
 # Trouble shooting
 
 ## Not able to start streaming on Android phone
 
-## LSL stream not detected in Unity
+## LSL stream not detected by Unity
+Consider disable the firewall or modify the firewall settings.
 
 ## More resources for trouble shooting
 - The LSL connections can be easily affected by network configurations, check out the [LSL Official Network Troubleshooting][1] documentation for insights and wisdom
 
-[1] https://labstreaminglayer.readthedocs.io/info/network-connectivity.html#wireless-connections
+[1]: https://labstreaminglayer.readthedocs.io/info/network-connectivity.html#wireless-connections
 
 
 # Miscellaneous
