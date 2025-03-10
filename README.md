@@ -2,6 +2,9 @@
 
 ![Contributors](https://img.shields.io/badge/contributor-PiranitaGomez-green)
 
+HR Streamer facilitates the streaming of heart rate data from a Google Pixel Watch to Unity, through the intermediary relay of an Android smartphone.
+
+
 *Quick links*
 
 - [Description](#description)
@@ -37,7 +40,7 @@ The code was developed based on the following resources:
 [3]: https://github.com/android/wear-os-samples/tree/main/DataLayer
 [4]: https://github.com/mutualmobile/ComposeSensors
 
-For further development, the following IDE is required:
+For further development, the following IDE required:
 - Android Studio (with Android SDK platform-tools including ADB installed)
 - USB debugging enabled on Android device and Watch. This option is typically found in the Developer Options menu on the device, which can be enabled by tapping the build number in the About Phone section of device settings multiple (7?) times.
 - Use a USB cable to connect the devices to the PC for testing
@@ -92,6 +95,8 @@ The code was tested on the following devices:
 
 <!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
 
+* Note: it is not possible to connect the watch and the phone using low-level BLE socket, see Wear OS development documentation [??]
+
 
 ## Step 2: Install HRStreamer apps on the watch and phone
 - Download and install the HRStreamer Wear app on the Pixel Watch
@@ -101,11 +106,20 @@ The code was tested on the following devices:
 
 
 ## Step 3: Set up Unity environment and add script 
-- 
+- Add the LSL4Unity package to your Unity environment by following the steps [here][1]
+- There is a C# script for LSL receiver located at Assets/LSLreceiver.cs.
+The script `LSLreceiver.cs` can be attached to any existing scene to read the heart rate readings sent from the Android smartphone and be processed as desired.
+- (Optional) In the menu bar, open the ???? plug in to lookup on going LSL streams.
+
 
 <!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
 
+[1] https://github.com/labstreaminglayer/LSL4Unity
+[2] https://github.com/labstreaminglayer/liblsl-Csharp/blob/master/README-Unity.md
+
 ## Step 4: Start streaming
+
+
 - Make sure the Pixel Watch is connected to the Android smartphone via BLE, then open the HRStreamer Android app on the smartphone, tap the "start wear activity" button to start streaming.
 
 <!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
@@ -132,12 +146,18 @@ If the `HRStreamer` is useful for your research, please consider citing the foll
 
 ## LSL stream not detected in Unity
 
+## More resources for trouble shooting
+- The LSL connections can be easily affected by network configurations, check out the [LSL Official Network Troubleshooting][1] documentation for insights and wisdom
+
+[1] https://labstreaminglayer.readthedocs.io/info/network-connectivity.html#wireless-connections
+
 
 # Miscellaneous
-## Lab Homepage
+## Lab homepage
 More details of this project, as well as other project of our research group, feel free to drop by the homepage of our ubicomp lab (<http://www.ubicomp-lab.org>) . 
 
 ## Funding
 This work was supported by the JSPS Grant-in-Aid for Scientific Research (B) (Grant Number: 23K25701)
+
 
 
