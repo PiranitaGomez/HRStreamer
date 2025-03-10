@@ -73,8 +73,7 @@ fun MainApp(
     //onQueryOtherDevicesClicked: () -> Unit,
     //onQueryMobileCameraClicked: () -> Unit,
     navigateToAppInfo: () -> Unit,
-    hr: Float,
-    light: Float
+    hr: Float
 ) {
     val scalingLazyListState = rememberScalingLazyListState()
     var isPermissionGranted: Boolean? by remember { mutableStateOf(null) }
@@ -119,7 +118,7 @@ fun MainApp(
                                     //modifier = Modifier.padding(10.dp).width(200.dp)
                                 )
                                 Text(
-                                    text = if (safeIsPermissionGranted) "$hr" else "Please " +
+                                    text = if (safeIsPermissionGranted) String.format("%.1f", hr) else "Please " +
                                         "grant the sensors permission first",
                                     textAlign = TextAlign.Center,
                                     fontSize = 56.sp,
@@ -128,6 +127,7 @@ fun MainApp(
                                     color = androidx.compose.ui.graphics.Color.Yellow,
                                     modifier = Modifier.padding(5.dp).width(200.dp)
                                 )
+                                /*
                                 Text(
 
                                     text = if (safeIsPermissionGranted) String.format(
@@ -139,7 +139,7 @@ fun MainApp(
                                     fontSize = 16.sp,
                                     fontFamily = FontFamily.SansSerif,
                                     fontWeight = FontWeight.Medium,
-                                )
+                                )*/
 
                                 if (!safeIsPermissionGranted) {
                                     Button(
@@ -295,7 +295,7 @@ fun MainAppPreviewEvents() {
         //onQueryMobileCameraClicked = {},
         navigateToAppInfo = {},
         hr = 66.toFloat(),
-        light = 10.toFloat()
+        //light = 10.toFloat()
     )
 }
 
@@ -309,6 +309,6 @@ fun MainAppPreviewEmpty() {
         //onQueryMobileCameraClicked = {},
         navigateToAppInfo = {},
         hr = 66.toFloat(),
-        light = 10.toFloat()
+        //light = 10.toFloat()
     )
 }

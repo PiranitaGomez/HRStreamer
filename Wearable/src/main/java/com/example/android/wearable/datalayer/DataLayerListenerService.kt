@@ -60,6 +60,7 @@ class DataLayerListenerService : WearableListenerService() {
                     }
                 }
 
+                /*
                 LIGHT_PATH -> {
                     scope.launch {
                         try {
@@ -78,7 +79,7 @@ class DataLayerListenerService : WearableListenerService() {
                             Log.d(TAG, "LIGHT Message failed")
                         }
                     }
-                }
+                }*/
             }
         }
     }
@@ -109,6 +110,6 @@ class DataLayerListenerService : WearableListenerService() {
         private const val DATA_ITEM_RECEIVED_PATH = "/data-item-received"
 
         const val HR_PATH = "/hr"
-        const val LIGHT_PATH = "/light"
+        //const val LIGHT_PATH = "/light"
     }
 }

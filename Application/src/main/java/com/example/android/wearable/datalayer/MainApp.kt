@@ -39,9 +39,9 @@ import java.time.ZoneId
 @Composable
 fun MainApp(
     hr: Float?,
-    light: Float?,
+    //light: Float?,
     hrtime: Long?,
-    lighttime: Long?,
+    //lighttime: Long?,
     onStartWearableActivityClick: () -> Unit
 ) {
     val nowtimestamp = LocalDateTime.now()
@@ -90,6 +90,7 @@ fun MainApp(
             Divider()
         }
 
+        /*
         item { // SHOW Light!!
             Column( modifier = Modifier
                 .padding(24.dp)
@@ -124,7 +125,7 @@ fun MainApp(
                 )
             }
             Divider()
-        }
+        }*/
 
     }
 }
@@ -136,8 +137,8 @@ fun MainApp(
 fun MainAppPreview() {
     MainApp(
         hr = 66.toFloat(),
-        light = 10.toFloat(),
+        //light = 10.toFloat(),
         hrtime = Instant.now().epochSecond,
-        lighttime = Instant.now().epochSecond
+        //lighttime = Instant.now().epochSecond
     ) {}
 }

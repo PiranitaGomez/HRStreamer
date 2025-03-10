@@ -55,8 +55,8 @@ class MainActivity : ComponentActivity() {
                 MainApp(
                     hr = clientDataViewModel.heartrate,
                     hrtime = clientDataViewModel.hrsendtime,
-                    light = clientDataViewModel.light,
-                    lighttime = clientDataViewModel.lighttime,
+                    //light = clientDataViewModel.light,
+                    //lighttime = clientDataViewModel.lighttime,
                     onStartWearableActivityClick = ::startWearableActivity
                 )
             }

@@ -32,6 +32,8 @@ import com.google.android.gms.wearable.DataMapItem
 //import com.google.android.gms.wearable.CapabilityInfo
 import edu.ucsd.sccn.LSL
 import java.io.IOException
+import java.time.Instant
+
 //import java.time.Instant
 //import kotlinx.coroutines.Job
 
@@ -62,11 +64,7 @@ class ClientDataViewModel :
 
     var heartrate by mutableStateOf<Float?>(null)
         private set
-    var light by mutableStateOf<Float?>(null)
-        private set
     var hrsendtime by mutableStateOf<Long?>(null)
-        private set
-    var lighttime by mutableStateOf<Long?>(null)
         private set
 
     //private var loadHRJob: Job = Job().apply { complete() }
@@ -95,7 +93,7 @@ class ClientDataViewModel :
 
         samples_HR[2] = (System.currentTimeMillis() % 100000).toInt()
         //samples_HR[2] = Instant.now().epochSecond.toInt()
-        Log.d(TAG2, "Now relay_timestamp_long:${System.currentTimeMillis()}")
+        Log.d(TAG2, "Now relay_timestamp_long:${Instant.now().toEpochMilli()}")
 
         try {
             /*final String dataString = Integer.toString(data);
@@ -182,22 +180,9 @@ class ClientDataViewModel :
                                     .dataMap
                                     .getLong(HR_TIME_KEY)
 
-                                Log.d(TAG1, "Wear Send Time:$hrsendtime")
-                                Log.d(TAG1, "Android Receive Time:${System.currentTimeMillis()}")
+                                Log.d(TAG1, "HR $heartrate, $hrsendtime, ${Instant.now().toEpochMilli()}")
 
                                 sendDataHR(heartrate, hrsendtime)
-                            }
-
-                            LIGHT_PATH -> {
-
-                                light = DataMapItem.fromDataItem(dataEvent.dataItem)
-                                    .dataMap
-                                    .getFloat(LIGHT_KEY)
-
-                                lighttime = DataMapItem.fromDataItem(dataEvent.dataItem)
-                                    .dataMap
-                                    .getLong(LIGHT_TIME_KEY)
-
                             }
 
                     }
@@ -209,14 +194,11 @@ class ClientDataViewModel :
     }
 
     companion object {
-        private const val TAG1 = "AndroidViewModel"
+        private const val TAG1 = "WSAndroidViewModel"
         private const val TAG2 = "LSL"
         const val HR_PATH = "/hr"
         const val HR_KEY = "hr"
         const val HR_TIME_KEY = "hr_time"
-        const val LIGHT_PATH = "/light"
-        const val LIGHT_KEY = "light"
-        const val LIGHT_TIME_KEY = "light_time"
     }
 
     /*

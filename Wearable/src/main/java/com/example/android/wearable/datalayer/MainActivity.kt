@@ -59,13 +59,9 @@ class MainActivity : ComponentActivity() {
                 PackageManager.PERMISSION_GRANTED
         }
 
-    private val hr: Float
+    private val hr: Pair<Float?, Long>
         @Composable
         get() = getHR(isBodySensorsPermissionGranted = isBodySensorsPermissionGranted)
-
-    private val light: Float
-        @Composable
-        get() = getLight(isBodySensorsPermissionGranted = isBodySensorsPermissionGranted)
 
     fun navigateToAppInfo() {
         startActivity(
@@ -82,12 +78,10 @@ class MainActivity : ComponentActivity() {
                 events = clientDataViewModel.events,
                 isBodySensorsPermissionGranted = isBodySensorsPermissionGranted,
                 navigateToAppInfo = ::navigateToAppInfo,
-                hr = hr,
-                light = light
+                hr = hr.first!!
             )
 
-            sendHR(hr) //send to Android device
-            sendLight(light) //send to Android device
+            sendHR(hr.first, hr.second) //send to Android device
 
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) // Set screen always on
 
@@ -109,20 +103,24 @@ class MainActivity : ComponentActivity() {
         //capabilityClient.removeListener(clientDataViewModel)
     }
 
-    private fun sendHR(hr: Float?) {
+    private fun sendHR(hr: Float?, time: Long?) {
         lifecycleScope.launch {
             try {
                 val request = PutDataMapRequest.create(HR_PATH).apply {
                     dataMap.putFloat(HR_KEY, hr!!)
-                    dataMap.putLong(HR_SEND_TIME_KEY, Instant.now().toEpochMilli()) //System.currentTimeMillis()) , Instant.now().epochSecond
+                    //dataMap.putLong(HR_TIME_KEY, Instant.now().toEpochMilli()) //System.currentTimeMillis()) , Instant.now().epochSecond
+                    dataMap.putLong(
+                        HR_TIME_KEY,
+                        time!!
+                    ) //System.currentTimeMillis()) , Instant.now().epochSecond
                 }
                     .asPutDataRequest()
                     .setUrgent()
 
                 val result = dataClient.putDataItem(request).await()
 
-                Log.d(TAG, "HR_KEY: $hr")
-                Log.d(TAG, "HR DataItem saved: $result")
+                Log.d(TAG, "HR $hr, $time")
+                //Log.d(TAG, "HR DataItem saved: $result")
                 //Log.d(TAG, "HR_TIME_KEY: ${Instant.now().atZone(ZoneId.of("Asia/Tokyo"))}")
             } catch (cancellationException: CancellationException) {
                 throw cancellationException
@@ -130,9 +128,9 @@ class MainActivity : ComponentActivity() {
                 Log.d(TAG, "HR Saving DataItem failed: $exception")
             }
         }
-
     }
 
+    /*
     private fun sendLight(light: Float?) {
         lifecycleScope.launch {
             try {
@@ -157,25 +155,26 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-    }
+    }*/
 
     companion object {
         private const val TAG = "WearMainActivity"
         private const val HR_PATH = "/hr"
         private const val HR_KEY = "hr"
-        private const val HR_SEND_TIME_KEY = "hr_time"
-        private const val LIGHT_PATH = "/light"
-        private const val LIGHT_KEY = "light"
-        private const val LIGHT_TIME_KEY = "light_time"
+        private const val HR_TIME_KEY = "hr_time"
+        //private const val LIGHT_PATH = "/light"
+        //private const val LIGHT_KEY = "light"
+        //private const val LIGHT_TIME_KEY = "light_time"
     }
 }
 
 
 @Composable
-fun getHR(isBodySensorsPermissionGranted: Boolean): Float {
+fun getHR(isBodySensorsPermissionGranted: Boolean): Pair<Float?, Long> {
     val lifecycleState by LocalLifecycleOwner.current.lifecycle.observeAsState()
     var isPermissionGranted: Boolean? by remember { mutableStateOf(null) }
     var hr: Float? by remember { mutableStateOf(null) }
+    val hr_time: Long?
 
 
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -188,7 +187,6 @@ fun getHR(isBodySensorsPermissionGranted: Boolean): Float {
     val heartRateSensorState = rememberHeartRateSensorState(autoStart = false)
 
     // BODY_SENSORS permission must be granted before accessing sensor
-
     LaunchedEffect(lifecycleState) {
         if (lifecycleState == Lifecycle.Event.ON_RESUME) {
             isPermissionGranted = isBodySensorsPermissionGranted
@@ -201,44 +199,9 @@ fun getHR(isBodySensorsPermissionGranted: Boolean): Float {
     }
 
     hr = heartRateSensorState.heartRate
+    hr_time = Instant.now().toEpochMilli()
 
-    return hr as Float
-
-}
-
-
-
-@Composable
-fun getLight(isBodySensorsPermissionGranted: Boolean): Float {
-    val lifecycleState by LocalLifecycleOwner.current.lifecycle.observeAsState()
-    var isPermissionGranted: Boolean? by remember { mutableStateOf(null) }
-    var light: Float? by remember { mutableStateOf(null) }
-
-
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            isPermissionGranted = isGranted
-        }
-    )
-
-    val lightSensorState = rememberLightSensorState()
-
-    // BODY_SENSORS permission must be granted before accessing sensor
-
-    LaunchedEffect(lifecycleState) {
-        if (lifecycleState == Lifecycle.Event.ON_RESUME) {
-            isPermissionGranted = isBodySensorsPermissionGranted
-            if (isPermissionGranted == true) {
-                lightSensorState.startListening()
-            } else {
-                permissionLauncher.launch(Manifest.permission.BODY_SENSORS)
-            }
-        }
-    }
-
-    light = lightSensorState.illuminance
-
-    return light as Float
+    return Pair(hr, hr_time)
 
 }
+
