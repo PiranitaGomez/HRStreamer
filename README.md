@@ -5,20 +5,19 @@
 *Quick links*
 
 - [Description](#description)
-	- [Wear/Andorid side](#wear/android-side)
+	- [Wear/Andorid side](#wear-android-side)
 	- [Unity side](#unity-side)
+	- [Disclaimer](#disclaimer)
 - [How to use?](#how-to-use)
-  - [Measure heart rate using Google Pixel Watch](#measure-heart-rate-using-google-pixel-watch)
-  - [Unity prerequisites](#unity-prerequisites)
-  - [Importing package in Unity](#importing-package-in-unity)
-  - [Example](#example)
-  - [Cite the research paper](#cite-the-research-paper)
-- [For further development](#for-further-development)
-	- [Develop for Wear/Android](#develop-for-wear/android)
-	- [Develop for Unity](#develop-for-unity)
-- [More information](#more-information)
-  - [Project's website](#projects-website)
-  - [More research papers about the `Excite-O-Meter`](#more-research-papers-about-the-excite-o-meter)
+  - [Step1: Pair up watch and phone](#step1-pair-up-watch-and-phone)
+  - [Step 2: Install HRStreamer apps on the watch and phone](#step-2-install-hrstreamer-apps-on-the-watch-and-phone)
+  - [Step 3: Set up Unity environment and add script](#step-3-set-up-unity-environment-and-add-script)
+  - [Step 4: Start streaming](#start-streaming)
+- [Cite the research paper](#cite-the-research-paper)
+- [Trouble shooting](#trouble-shooting)
+- [Miscellaneous](#more-information)
+  - [Lab Homepage](#lab-homepage)
+  - [Funding](#funding)
 
 ---
 
@@ -27,7 +26,7 @@ The `HRStreamer` is a software ecosystem that facilitates the data flow from Wea
 
 
 ## Wear/Android side
-This consists of a Wear OS companion app that runs on the Google Pixel Watch, and an Android app that runs on an Android smartphone. The apps work together to enable the streaming of heart rate data from a wearable device to a handheld Android device using the Wear Data Layer API. The Wear OS app utilizes a [`WearableListenerService`][1] to consume and transmit DataEvents, while the Android app implements the [`DataClient.OnDataChangedListener` interface][2].
+This consists of a Wear OS companion app that runs on the Google Pixel Watch, and an Android app that runs on an Android smartphone. The apps work together to enable the streaming of heart rate data from a wearable device to a handheld Android device using the Wear Data Layer API. The Wear OS app utilizes a [`WearableListenerService`][1] to consume and transmit DataEvents, while the Android app implements the [`DataClient.OnDataChangedListener`][2] interface.
 
 The code was developed based on the following resources:
 - [Android DataLayer Sample][3]
@@ -79,7 +78,7 @@ An example of console debugging information of the LSL receiver
 
 ```
 
-## Claimer
+## Disclaimer
 The code was tested on the following devices:
 - Wear app: Google Pixel Watch 2, Wear OS 4.0
 - Android app: OUKITEL WP12 Pro, Android 11
@@ -133,9 +132,12 @@ If the `HRStreamer` is useful for your research, please consider citing the foll
 
 ## LSL stream not detected in Unity
 
-# Lab Homepage
+
+# Miscellaneous
+## Lab Homepage
 More details of this project, as well as other project of our research group, feel free to drop by the homepage of our ubicomp lab (<http://www.ubicomp-lab.org>) . 
 
-# Funding
+## Funding
 This work was supported by the JSPS Grant-in-Aid for Scientific Research (B) (Grant Number: 23K25701)
+
 
