@@ -116,4 +116,9 @@ If the `HRStreamer` is useful for your research, please consider citing the foll
 }
 ```
 
+## Lab Homepage
+More details of this project, as well as other project of our research group, feel free to drop by the homepage of our ubicomp lab (<http://www.ubicomp-lab.org>) . 
+
+## Funding
+This work was supported by the JSPS Grant-in-Aid for Scientific Research (B) (Grant Number: 23K25701)
 
