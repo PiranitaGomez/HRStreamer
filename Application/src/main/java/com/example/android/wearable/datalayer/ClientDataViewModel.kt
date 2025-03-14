@@ -72,28 +72,27 @@ class ClientDataViewModel :
     //// LSL Outlet
     val LSL_OUTLET_NAME_HR = "HeartRate"
     val LSL_OUTLET_TYPE_HR = "DataLayer"
-    val LSL_OUTLET_CHANNELS_HR = 3 // One channel for HR data, one channel for sendtime, one channel for relaytime
+    // val LSL_OUTLET_CHANNELS_HR = 3 // One channel for HR data, one channel for sendtime, one channel for relaytime
+    val LSL_OUTLET_CHANNELS_HR = 1 // One channel for HR data, one channel for sendtime, one channel for relaytime
     val LSL_OUTLET_NOMINAL_RATE_HR = LSL.IRREGULAR_RATE
     val LSL_OUTLET_CHANNEL_FORMAT_HR = LSL.ChannelFormat.int32
     val DEVICE_ID = "PixelWatch"
     var info_HR: LSL.StreamInfo? = null
     var outlet_HR: LSL.StreamOutlet? = null
     //var samples_HR: Array<Int?> = arrayOfNulls(1)
-    var samples_HR = IntArray(3)
+    var samples_HR = IntArray(1)
 
     private fun sendDataHR(data: Float?, timestamp: Long?) {
-
-        //Log.d("LSL", "samples_HR: $samples_HR")
 
         samples_HR[0] = data!!.toInt()
         Log.d(TAG2, "Now sending HR:$data")
 
-        samples_HR[1] = (timestamp!! % 100000).toInt() // not able to send long format, so only truncate the lower 5 digits
-        Log.d(TAG2, "Now send_timestamp:$timestamp")
+        //samples_HR[1] = (timestamp!! % 100000).toInt() // not able to send long format, so only truncate the lower 5 digits
+        //Log.d(TAG2, "Now send_timestamp:$timestamp")
 
-        samples_HR[2] = (System.currentTimeMillis() % 100000).toInt()
+        //samples_HR[2] = (System.currentTimeMillis() % 100000).toInt()
         //samples_HR[2] = Instant.now().epochSecond.toInt()
-        Log.d(TAG2, "Now relay_timestamp_long:${Instant.now().toEpochMilli()}")
+        //Log.d(TAG2, "Now relay_timestamp_long:${Instant.now().toEpochMilli()}")
 
         try {
             /*final String dataString = Integer.toString(data);
