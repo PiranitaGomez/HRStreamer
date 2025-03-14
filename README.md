@@ -109,19 +109,16 @@ The code was tested on the following devices:
 
 ## Step 3: Set up Unity environment and add script 
 - Add the LSL4Unity package to your Unity environment by following the steps [here][LSL4Unity]
-- There is a C# script for LSL receiver located at Assets/LSLreceiver.cs.
-The script `LSLreceiver.cs` can be attached to any existing scene to read the heart rate readings sent from the Android smartphone and be processed as desired.
-- (Optional) In the menu bar, open the ???? plug in to lookup on going LSL streams.
-
+- (Optional) In the menu bar, hit "LSL" > "Show Streams". The LSL Utility pane will pop up and show the on going LSL streams.
+- An very simple example scene to show the received heart rate can be downloaded [here][SampleScene].
 
 <!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
 
 [LSL4Unity]: https://github.com/labstreaminglayer/LSL4Unity
 [liblsl]: https://github.com/labstreaminglayer/liblsl-Csharp/blob/master/README-Unity.md
+[SampleScene]: https://drive.google.com/file/d/18fLuTYfTJ9fL__QcylvnFoN6KLvgBfSw/view?usp=sharing
 
 ## Step 4: Start streaming
-
-
 - Make sure the Pixel Watch is connected to the Android smartphone via BLE, then open the HRStreamer Android app on the smartphone, tap the "start wear activity" button to start streaming.
 
 <!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
