@@ -66,6 +66,16 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
+
+    buildTypes {
+        release {
+          isDebuggable = false
+        }
+        debug {
+          isDebuggable = true
+        }
+    }
+
 }
 
 dependencies {
