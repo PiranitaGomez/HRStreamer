@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.android.wearable.datalayer">
+    package="com.example.android.wearable.hrstreamer">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.BODY_SENSORS" />
@@ -55,7 +55,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.example.android.wearable.datalayer.EXAMPLE" />
+                <action android:name="com.example.android.wearable.hrstreamer.EXAMPLE" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.wearable.datalayer
+package com.example.android.wearable.hrstreamer
 
 import android.app.Activity
 import android.content.Intent
