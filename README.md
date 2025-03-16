@@ -90,13 +90,14 @@ The code was tested on the following devices:
 # How to use?
 
 ## Step1: Pair up watch and phone
-- Download and install the Wear OS app and the Watch app on the Android smartphone 
+- Download and install [HRStreamer][HRStreamerAPK] on your Android smartphone and Pixel Watch 
 - Pair up the Google Pixel Watch with the Android smartphone in the Watch app
 
 <!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
 
 * Note: the data layer APIs are the only APIs possible for set up communication between Pixel Watch and Android phone. It is not possible to open low-level sockets to create communication channel. See [here][DataLayerAPI].
 
+[HRStreamerAPK]: https://drive.google.com/file/d/18phEL28fOJgKn4YLVbLwj6y7kFIfTDbR/view?usp=sharing
 [DataLayerAPI]: https://developer.android.com/training/wearables/data/overview
 
 
