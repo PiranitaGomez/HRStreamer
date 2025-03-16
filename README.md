@@ -47,12 +47,15 @@ For further development, the following IDE required:
 
 
 ## Unity side
-This consists of ...
+The [LSL4Unity][LSL4Unity] needs to be added to Unity. LSL4Unity comes with a plug in in the menu bar LSL > Show Streams; it opens a pane to see the LSL streams found. The HR stream from Androd smartphone comes with Name="HeartRate", Type="DataLayer", HostName="localhost", DataRate=0 (which means irregular rate). The HR data can be retrieved from the LSL Inlet in a C# script. An very simple example scene to show the received heart rate can be downloaded [here][SampleScene].
 
 There is a C# script for LSL receiver located at Assets/LSLreceiver.cs
 The scene is extremely simple; it just shows the received HR readings. It's located at Assets/Scenes/SampleScene.unity
 
-There is a LSL plug in in the menu bar LSL->Show Streams. It opens a pane to see the LSL streams found. The HR stream comes with Name="HeartRate", Type="DataLayer", HostName="localhost", DataRate=0 (which means irregular rate).
+[LSL4Unity]: https://github.com/labstreaminglayer/LSL4Unity
+[SampleScene]: https://drive.google.com/file/d/18fLuTYfTJ9fL__QcylvnFoN6KLvgBfSw/view?usp=sharing
+
+<!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
 
 An example of console debugging information of the LSL receiver
 
@@ -90,8 +93,8 @@ The code was tested on the following devices:
 # How to use?
 
 ## Step1: Pair up watch and phone
-- Download and install [HRStreamer][HRStreamerAPK] on your Android smartphone and Pixel Watch 
 - Pair up the Google Pixel Watch with the Android smartphone in the Watch app
+- Download and install [HRStreamer][HRStreamerAPK] on your Android smartphone and Pixel Watch 
 
 <!--img src="screenshots/phone_image.png" height="400" alt="Screenshot"/> <img src="screenshots/wearable_background_image.png" height="400" alt="Screenshot"/--> 
 
