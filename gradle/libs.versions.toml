@@ -14,6 +14,7 @@ ktlint = "0.50.0"
 org-jetbrains-kotlin = "1.9.23"
 org-jetbrains-kotlinx = "1.8.0"
 room-common = "2.6.1"
+#vico = "2.1.0"
 
 [libraries]
 android-desugarjdklibs = "com.android.tools:desugar_jdk_libs:2.0.4"
@@ -42,6 +43,13 @@ playservices-wearable = "com.google.android.gms:play-services-wearable:18.1.0"
 wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose" }
 wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose" }
 androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "room-common" }
+# For Jetpack Compose.
+#vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
+# For Material 2 theming in Jetpack Compose.
+#vico-compose-m2 = { group = "com.patrykandpatrick.vico", name = "compose-m2", version.ref = "vico" }
+# For Material 3 theming in Jetpack Compose.
+#vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
+
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

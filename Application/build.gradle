@@ -92,10 +92,22 @@ dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation files('libs/jna-5.13.0.jar') // this was commented out in the exciteometer, it actually works though
 
+    // For Jetpack Compose.
+
+    // For making charts
+    //implementation(libs.vico.compose)
+    //implementation(libs.vico.compose.m2)
+    //implementation(libs.vico.compose.m3)
+    //implementation(libs.vico.multiplatform)
+    //implementation(libs.vico.views)
+    //implementation 'co.yml:ycharts:2.1.0'
+
     // Compose sensor library
     implementation(libs.composesensors)
 
-    // csv writing library
+
+
+  // csv writing library
     // implementation 'com.floern.castingcsv:casting-csv-kt:1.2' // not working
     // implementation("com.github.doyaaaaaken:kotlin-csv-js:1.3.0")
 

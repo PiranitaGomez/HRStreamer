@@ -14,7 +14,9 @@ package com.example.android.wearable.hrstreamer
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Button
@@ -36,21 +38,84 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
+/*
+data class HeartRateEntry(val time: Float, val heartRate: Float)
+@Composable
+fun GraphScreen(hr: Float?) {
+    // List to hold the heart rate data
+    val hrData = remember { mutableStateListOf<HeartRateEntry>() }
+
+    // Update hrData whenever new hr value comes in
+    LaunchedEffect(hr) {
+        hr?.let {
+            val time = hrData.size.toFloat() // Simulate time axis as index-based
+            hrData.add(HeartRateEntry(time, it)) // Add new heart rate entry
+            if (hrData.size > 50) hrData.removeAt(0) // Limit the data size to the last 50 points
+        }
+    }
+
+    // Map hrData to ChartEntry
+    val chartEntries = hrData.map {
+        ChartEntry(it.time, it.heartRate)
+    }
+
+    // Create a Chart entry model using VICO's entryModelOf method
+    val chartEntryModel = entryModelOf(*chartEntries.toTypedArray())
+
+    // Render the chart
+    LineChart(
+        chartEntryModel = chartEntryModel,
+        modifier = Modifier.fillMaxSize().height(300.dp)
+    )
+}
+*/
+
 @Composable
 fun MainApp(
     hr: Float?,
     //light: Float?,
     hrtime: Long?,
     //lighttime: Long?,
+    isStreaming: Boolean,
+    onToggleStreamingClick: () -> Unit,
     onStartWearableActivityClick: () -> Unit
 ) {
     val nowtimestamp = LocalDateTime.now()
     val timezone = "Asia/Tokyo"
 
+    /*
+    var hrData by remember { mutableStateOf(mutableListOf<Entry>()) }
+
+    LaunchedEffect(hr) {
+        hr?.let {
+            val time = hrData.size.toFloat() // Simulate time axis (index-based)
+            hrData.add(Entry(time, it))
+            if (hrData.size > 50) hrData.removeAt(0) // Keep only last 50 values
+        }
+    }*/
+
     LazyColumn(contentPadding = PaddingValues(16.dp)) {
         item {
-            Button(onClick = onStartWearableActivityClick) {
-                Text(stringResource(id = R.string.start_wearable_activity))
+            Button(onClick = onStartWearableActivityClick,
+                   colors = androidx.compose.material.ButtonDefaults.buttonColors(
+                       backgroundColor = Color.DarkGray //Color(0xFF333333)
+                   ),
+                elevation = null, // Removes the gray outline
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+            ) {
+                Text(stringResource(id = R.string.start_wearable_activity), color = Color.White)
+            }
+        }
+        item {
+            Button(
+                onClick = onToggleStreamingClick,
+                colors = androidx.compose.material.ButtonDefaults.buttonColors(
+                    backgroundColor = Color.Red //Color(0xFFD32F2F) // Grass Green
+                ),
+                elevation = null, // Removes the gray outline
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+            ) {
+                Text(if (isStreaming) "Stop Streaming" else "Start Streaming", color = Color.White)
             }
             Divider()
         }
@@ -88,6 +153,10 @@ fun MainApp(
                 )
             }
             Divider()
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            //HeartRatePlot(hrData)
         }
 
         /*
@@ -138,7 +207,9 @@ fun MainAppPreview() {
     MainApp(
         hr = 66.toFloat(),
         //light = 10.toFloat(),
-        hrtime = Instant.now().epochSecond,
-        //lighttime = Instant.now().epochSecond
-    ) {}
+        hrtime = Instant.now().toEpochMilli(),
+        isStreaming = true,
+        onToggleStreamingClick = {},
+        onStartWearableActivityClick = {}
+        )
 }

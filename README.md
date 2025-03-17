@@ -149,6 +149,9 @@ This paper also discusses the feasibility and pros/cons of other system architec
 # Trouble shooting
 
 ## Not able to start streaming on Android phone
+If streaming doesn't start, confirm that the watch is connected and responding.
+
+
 
 ## LSL stream not detected by Unity
 Consider disable the firewall or modify the firewall settings.

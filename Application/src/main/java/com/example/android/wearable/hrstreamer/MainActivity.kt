@@ -19,6 +19,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.DataClient
@@ -46,19 +52,20 @@ class MainActivity : ComponentActivity() {
     private val capabilityClient by lazy { Wearable.getCapabilityClient(this) }
 
     private val clientDataViewModel by viewModels<ClientDataViewModel>()
+    private var isStreaming by mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             MaterialTheme {
-                MainApp(
-                    hr = clientDataViewModel.heartrate,
-                    hrtime = clientDataViewModel.hrsendtime,
-                    //light = clientDataViewModel.light,
-                    //lighttime = clientDataViewModel.lighttime,
-                    onStartWearableActivityClick = ::startWearableActivity
-                )
+                    MainApp(
+                        hr = clientDataViewModel.heartrate,
+                        hrtime = clientDataViewModel.hrsendtime,
+                        isStreaming = isStreaming,
+                        onStartWearableActivityClick = ::startWearableActivity,
+                        onToggleStreamingClick = ::toggleStreaming
+                    )
             }
         }
 
@@ -71,7 +78,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        dataClient.addListener(clientDataViewModel)
+        if (isStreaming) {
+            dataClient.addListener(clientDataViewModel)
+        }
         /*messageClient.addListener(clientDataViewModel)
         capabilityClient.addListener(
             clientDataViewModel,
@@ -94,12 +103,21 @@ class MainActivity : ComponentActivity() {
 
     override fun onPause() {
         super.onPause()
-        dataClient.removeListener(clientDataViewModel)
+        if (isStreaming) {
+            dataClient.removeListener(clientDataViewModel)
+        }
         //messageClient.removeListener(clientDataViewModel)
         //capabilityClient.removeListener(clientDataViewModel)
     }
 
-
+    private fun toggleStreaming() {
+        isStreaming = !isStreaming
+        if (isStreaming) {
+            dataClient.addListener(clientDataViewModel)
+        } else {
+            dataClient.removeListener(clientDataViewModel)
+        }
+    }
 
     private fun startWearableActivity() {
         lifecycleScope.launch {
