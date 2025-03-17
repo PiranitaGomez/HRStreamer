@@ -92,10 +92,9 @@ dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation files('libs/jna-5.13.0.jar') // this was commented out in the exciteometer, it actually works though
 
-    // For Jetpack Compose.
 
     // For making charts
-    //implementation(libs.vico.compose)
+    implementation(libs.vico.compose)
     //implementation(libs.vico.compose.m2)
     //implementation(libs.vico.compose.m3)
     //implementation(libs.vico.multiplatform)
