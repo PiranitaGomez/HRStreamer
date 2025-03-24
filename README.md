@@ -4,6 +4,8 @@
 
 HR Streamer facilitates the streaming of heart rate data from a Google Pixel Watch to Unity, via the intermediary relay of an Android smartphone.
 
+<img src="HRStreamer_UI.png" alt="HRStreamer Screenshots" width="90%"/>
+
 ---
 
 ## Quick Links
