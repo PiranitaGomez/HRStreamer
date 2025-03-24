@@ -11,8 +11,12 @@
  */
 package com.example.android.wearable.hrstreamer
 
+//import com.google.android.gms.wearable.MessageClient
+//import com.google.android.gms.wearable.MessageEvent
+//import com.google.android.gms.wearable.CapabilityClient
+//import com.google.android.gms.wearable.CapabilityInfo
+
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.os.AsyncTask
 import android.util.Log
 import androidx.annotation.StringRes
@@ -21,21 +25,19 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-
 import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.DataEvent
 import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.DataMapItem
-//import com.google.android.gms.wearable.MessageClient
-//import com.google.android.gms.wearable.MessageEvent
-//import com.google.android.gms.wearable.CapabilityClient
-//import com.google.android.gms.wearable.CapabilityInfo
 import edu.ucsd.sccn.LSL
 import java.io.IOException
 import java.time.Instant
 
 //import java.time.Instant
 //import kotlinx.coroutines.Job
+
+// Function to write heart rate and timestamp to a CSV file
+
 
 /**
  * A state holder for the client data. Also interface the OnDataChangedListener
@@ -115,7 +117,36 @@ class ClientDataViewModel :
 
     }
 
+    /*
+    private fun writeToCSV(context: Context, heartrate: Float, timestamp: Long) {
+        val filename = "heart_rate_data.csv"
 
+        // Get the path to the app's external files directory (or use internal storage for private data)
+        val path = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+
+        if (path != null) {
+            val file = File(path, filename)
+
+            // Open the file for writing
+            try {
+                val fileOutputStream = FileOutputStream(file, true) // true to append data
+                val outputStreamWriter = OutputStreamWriter(fileOutputStream)
+                val bufferedWriter = BufferedWriter(outputStreamWriter)
+
+                // If the file is new, write the headers (optional)
+                if (file.length() == 0L) {
+                    bufferedWriter.write("HeartRate, Timestamp\n") // CSV Header
+                }
+
+                // Write the new data line
+                bufferedWriter.write("$heartrate, $timestamp\n")
+                bufferedWriter.close() // Don't forget to close the file
+            } catch (e: Exception) {
+                Log.e("CSV", "Error writing to CSV file: ${e.message}")
+            }
+        }
+    }
+*/
     @SuppressLint("VisibleForTests")
     override fun onDataChanged(dataEvents: DataEventBuffer) {
 
@@ -182,6 +213,7 @@ class ClientDataViewModel :
                                 Log.d(TAG1, "HR $heartrate, $hrsendtime, ${Instant.now().toEpochMilli()}")
 
                                 sendDataHR(heartrate, hrsendtime)
+
                             }
 
                     }

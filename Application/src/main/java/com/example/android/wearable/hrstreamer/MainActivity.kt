@@ -13,23 +13,26 @@ package com.example.android.wearable.hrstreamer
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.Wearable
+import java.io.BufferedWriter
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStreamWriter
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -67,15 +70,103 @@ class MainActivity : ComponentActivity() {
                         onToggleStreamingClick = ::toggleStreaming
                     )
             }
+
+            writeToCSV(clientDataViewModel.heartrate, clientDataViewModel.hrsendtime)
         }
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
+        /*
+        // Observe heart rate data changes in ViewModel
+        clientDataViewModel.heartrate?.let { heartrate ->
+            clientDataViewModel.hrsendtime?.let { hrsendtime ->
+                // Write data to CSV when heart rate or timestamp is updated
+                writeToCSV(heartrate, hrsendtime)
+            }
+        }*/
 
     }
 
+    private fun writeToCSV(heartrate: Float?, timestamp: Long?) {
 
+        if (heartrate == null || timestamp == null) {
+            Log.e("CSV", "Heart rate or timestamp is null. Data will not be written.")
+            return
+        }
 
+        val filename = "hr_data.csv"
+        val context = application // Context is needed to access app storage
+
+        // Get the path to the app's external files directory (or use internal storage for private data)
+        val path = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+
+        if (path != null) {
+            val file = File(path, filename)
+            Log.d("CSV", "File path: ${file.absolutePath}")
+
+            // Open the file for writing
+            try {
+                // Check if file exists, if not, create a new file with headers
+                val fileOutputStream = FileOutputStream(file, true) // true to append data
+                val outputStreamWriter = OutputStreamWriter(fileOutputStream)
+                val bufferedWriter = BufferedWriter(outputStreamWriter)
+
+                // If the file is new, write the headers (optional)
+                if (file.length() == 0L) {
+                    bufferedWriter.write("Timestamp, HeartRate\n") // CSV Header
+                    Toast.makeText(this, "Writing headers to file", Toast.LENGTH_SHORT).show()
+                    Log.d("CSV", "Writing headers to file")
+                }
+
+                // Write the new data line
+                bufferedWriter.write("$heartrate, $timestamp\n")
+                bufferedWriter.close() // Don't forget to close the file
+                Toast.makeText(this, "Data written to file successfully", Toast.LENGTH_SHORT).show()
+                Log.d("CSV", "Data written to file successfully")
+            } catch (e: Exception) {
+                Log.e("CSV", "Error writing to CSV file: ${e.message}")
+            }
+        } else {
+            Log.e("CSV", "Path is null, cannot write to file")
+        }
+    }
+
+    /*
+    private fun writeToCSV(heartrate: Float, timestamp: Long) {
+        val filename = "heart_rate_data.csv"
+
+        // Get the path to the app's external files directory (or use internal storage for private data)
+        val path = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+
+        Log.d("CSV", "File path: $path")
+
+        if (path != null) {
+            val file = File(path, filename)
+
+            try {
+                // Open the file for writing
+                val fileOutputStream = FileOutputStream(file, true) // true to append data
+                val outputStreamWriter = OutputStreamWriter(fileOutputStream)
+                val bufferedWriter = BufferedWriter(outputStreamWriter)
+
+                // If the file is new, write the headers (optional)
+                if (file.length() == 0L) {
+                    Log.d("CSV", "Creating new file")
+                    bufferedWriter.write("HeartRate, Timestamp\n") // CSV Header
+                }
+
+                // Write the new data line
+                Log.d("CSV", "Saving to file $heartrate, $timestamp")
+                Toast.makeText(this, "Saving HR data", Toast.LENGTH_SHORT).show()
+                bufferedWriter.write("$heartrate, $timestamp\n")
+                bufferedWriter.close() // Close the file
+            } catch (e: Exception) {
+                Log.e("CSV", "Error writing to CSV file: ${e.message}")
+                Toast.makeText(this, "Error writing to CSV file: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+*/
     override fun onResume() {
         super.onResume()
         if (isStreaming) {
