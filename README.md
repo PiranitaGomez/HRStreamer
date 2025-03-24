@@ -130,7 +130,7 @@ BibTeX citation:
 This paper also discusses the feasibility and pros/cons of other system architecture designs for the HRStreamer.
 
 ### Lab homepage
-For more details of this project, as well as other project of our research group, feel free to drop by the homepage of our [UBICOMP Labs](http://www.ubicomp-lab.org). 
+For more details of this project, as well as other project of our research group, feel free to drop by the homepage of our [UBICOMP Lab](http://www.ubicomp-lab.org). 
 
 ### Funding
 This work was supported by the JSPS Grant-in-Aid for Scientific Research (B) (Grant Number: 23K25701)
