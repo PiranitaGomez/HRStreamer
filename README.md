@@ -104,7 +104,7 @@ The code was tested on the following devices:
 ### Issue 2: LSL stream not detected by Unity
 - Disable the firewall or adjust its settings to allow LSL traffic.
 
-For more help with the network issues, check out the [LSL Network Troubleshooting Guide](https://labstreaminglayer.readthedocs.io/info/network-connectivity.html#wireless-connections).
+For more help with networking related issues, check out the [LSL Network Troubleshooting Guide](https://labstreaminglayer.readthedocs.io/info/network-connectivity.html#wireless-connections).
 
 
 
@@ -130,7 +130,7 @@ BibTeX citation:
 This paper also discusses the feasibility and pros/cons of other system architecture designs for the HRStreamer.
 
 ### Lab homepage
-For more details of this project, as well as other project of our research group, feel free to drop by the homepage of our [ubicomp lab](http://www.ubicomp-lab.org). 
+For more details of this project, as well as other project of our research group, feel free to drop by the homepage of our [UBICOMP Labs](http://www.ubicomp-lab.org). 
 
 ### Funding
 This work was supported by the JSPS Grant-in-Aid for Scientific Research (B) (Grant Number: 23K25701)
