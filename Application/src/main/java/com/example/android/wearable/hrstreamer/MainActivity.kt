@@ -114,12 +114,12 @@ class MainActivity : ComponentActivity() {
                 // If the file is new, write the headers (optional)
                 if (file.length() == 0L) {
                     bufferedWriter.write("Timestamp, HeartRate\n") // CSV Header
-                    Toast.makeText(this, "Writing headers to file", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this, "Writing headers to file", Toast.LENGTH_SHORT).show()
                     Log.d("CSV", "Writing headers to file")
                 }
 
                 // Write the new data line
-                bufferedWriter.write("$heartrate, $timestamp\n")
+                bufferedWriter.write("$timestamp, $heartrate\n")
                 bufferedWriter.close() // Don't forget to close the file
                 Toast.makeText(this, "Data written to file successfully", Toast.LENGTH_SHORT).show()
                 Log.d("CSV", "Data written to file successfully")
@@ -127,6 +127,7 @@ class MainActivity : ComponentActivity() {
                 Log.e("CSV", "Error writing to CSV file: ${e.message}")
             }
         } else {
+            Toast.makeText(this, "Path is null, cannot write to file", Toast.LENGTH_SHORT).show()
             Log.e("CSV", "Path is null, cannot write to file")
         }
     }
